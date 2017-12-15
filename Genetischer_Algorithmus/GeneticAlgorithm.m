@@ -85,31 +85,31 @@ grid minor;
 %% Anfangspopulation festlegen und plotten
 %%------------------------------------------------------------------------
 
-Population = zeros(popsize,3);
+Population = zeros(3,popsize);
 best = [0,0,inf];
 
 for i=1:1:popsize
     
     %x- und y-Wert zufällig gleichverteilt ermitteln innerhalb des
     %Suchraums
-    Population(i,1) = random('unif',xmin,xmax);
-    Population(i,2) = random('unif',ymin,ymax);
+    Population(1,i) = random('unif',xmin,xmax);
+    Population(2,i) = random('unif',ymin,ymax);
     
     %Fitnesswerte berechnen
-    Population(i,3) = fit(Population(i,1),Population(i,2));
+    Population(3,1) = fit(Population(1,i),Population(2,i));
     
     %Anfangspopulation plotten
     subplot(1,2,1);
     hold on;
-    plot3(Population(i,1),Population(i,2),Population(i,3),'k+','MarkerSize',8);
+    plot3(Population(1,i),Population(2,i),Population(3,i),'k+','MarkerSize',8);
     
     subplot(1,2,2);
     hold on;
-    plot(Population(i,1),Population(i,2),'k+','MarkerSize',8);
+    plot(Population(1,i),Population(2,i),'k+','MarkerSize',8);
     
     %Beste Fitness suchen
-    if Population(i,3) < best(3)
-       best(:) = Population(i,:);
+    if Population(3,i) < best(3)
+       best(:) = Population(:,i);
     end
     
 end
@@ -130,15 +130,20 @@ plot(best(1),best(2),'r+','MarkerSize',20);
 %Anzahl der Ausgabeunterbrechungen der Schritte
 update_steps = 10;
 %Children Population anlegen
-Children = zeros(popsize,3);
+Children = zeros(3,popsize);
 
 for g=2:1:g_max
     
     %-------------------
-    % 1. Selektion
+    % 1. Codierung der Generation
+    %-------------------
+    
+    
+    %-------------------
+    % 2. Selektion
     %-------------------
     %Gesamtfitness berechnen aller Chromosome
-    tot_fit = sum(Population(:,3));
+    tot_fit = sum(Population(3,:));
     %Später löschen:
     Children = Population;
     
@@ -146,23 +151,30 @@ for g=2:1:g_max
     %Children = sel_fun(Population);
     
     %-------------------
-    % 2. Cross-Over
+    % 3. Cross-Over
     %-------------------
     
     %Cross-Over Algorithmus:  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     %Children = cro_fun(Children);
     
     %-------------------
-    % 3. Mutation
+    % 4. Mutation
     %-------------------
     
     %Mutation Algorithmus:  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     %Children = mut_fun(Children);
     
+    
     %-------------------
-    % 4. Neue Fitnesswerte berechnen und Population überschreiben
+    % 5. Dekodierung
     %-------------------
-    Children(i,3) = fit(Children(i,1),Children(i,2));
+    
+    
+    
+    %-------------------
+    % 6. Neue Fitnesswerte berechnen und Population überschreiben
+    %-------------------
+    Children(3,i) = fit(Children(1,i),Children(1,i));
     Population = Children;
     
     %Beste Fitness suchen 
@@ -212,7 +224,7 @@ for g=2:1:g_max
     end
     
     %-------------------
-    % 5. Abbruchbedingung
+    % 7. Abbruchbedingung
     %-------------------
     
 end
