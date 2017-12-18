@@ -1,6 +1,6 @@
-function [loesung,Max_Gen] = GeneticAlgorithm(g_max, fit, xmin, xmax, ymin, ymax, popsize)
+function [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, fit, xmin, xmax, ymin, ymax, popsize,opt,dopt)
 
-% Aufruf:    [loesung] = GeneticAlgorithm(g_max, fit, xmin, xmax, ymin, ymax, popsize, sel_fun, cro_fun, mut_fun)
+% Aufruf:    [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, fit, xmin, xmax, ymin, ymax, popsize, sel_fun, cro_fun, mut_fun,opt,dopt)
 % g_max:     maximale Anzahl Iterationen/Generationen Default: 1000
 % fit:       Fitnessfunktion: Funktionsargument Default: @fRosenbrock
 % xmin:      minimaler Wert für x (Suchbereich in der Funktion) Default: -3
@@ -11,8 +11,25 @@ function [loesung,Max_Gen] = GeneticAlgorithm(g_max, fit, xmin, xmax, ymin, ymax
 % sel_fun:   Selektionsalgortihmus Default: @fRoulette
 % cro_fun:   Cross-Over Algorithmus Default: @f
 % mut_fun:   Mutations Algorithmus Default: @f
+% opt:       "optimale" Lösung des Minimierungsproblems (näherungsweise)
+%            Default: [1;,1; 0] --> für Rosenbrock
+% dopt:      Mindestgenuigkeit zwischen opt und loesung --> Abbruchbedingung Default: 1e-5 
 
 % loesung:   [x_min; x_max; f_min]
+% Best_Counter: Iterationen/Generationen für Näherung
+% accuracy:  Abweichung zwischen gefundener Lösung und "Optimum" -->
+%            Genauigekit
+
+
+%%------------------------------------------------------------------------
+%% Einstellungen
+%%------------------------------------------------------------------------
+
+%Ausgabe von Plots ein/ausschalten
+PLOT = false;
+
+%Abbruchbediengung ein/ausschalten
+BREAK = true;
 
 
 %%------------------------------------------------------------------------
@@ -20,7 +37,7 @@ function [loesung,Max_Gen] = GeneticAlgorithm(g_max, fit, xmin, xmax, ymin, ymax
 %%------------------------------------------------------------------------
 
 if ~exist('t_max','var') g_max = 1000; end
-if ~exist('func','var') fit = @fRosenbrock; end
+if ~exist('fit','var') fit = @fRosenbrock; end
 if ~exist('xmin','var') xmin = -3; end
 if ~exist('xmax','var') xmax = 3; end
 if ~exist('ymin','var') ymin = -3; end
@@ -29,56 +46,62 @@ if ~exist('popsize','var') popsize = 10; end
 %if ~exist('sel_fun','var') sel_fun = @; end
 %if ~exist('cro_fun','var') cro_fun = @; end
 %if ~exist('mut_fun','var') mut_fun = @; end
+if ~exist('opt','var') opt = [1;,1; 0]; end
+if ~exist('dopt','var') dopt = 1e-5; end
 
 
 %%------------------------------------------------------------------------
 %% Graphische Ausgabe der zu minimierenden Funktion
 %%------------------------------------------------------------------------
 
-%Auflösung 
-n = 30;
-%X-Y Ebene aufspannen und Funktionswert für jeden Punkt ermitteln
-x = linspace(xmin,xmax,n);
-y = linspace(ymin,ymax,n);
-[X,Y] = meshgrid(x,y);
-Z = fit(X,Y);
+if PLOT == true
 
-%Funktion plotten
-figure(1);
-subplot(1,2,1);
-mesh(X,Y,Z);
-xlabel('x','FontSize',13,'FontWeight','bold'); 
-ylabel('y','FontSize',13,'FontWeight','bold'); 
-zlabel('z','FontSize',13,'FontWeight','bold'); 
-title('Funktionsplot');
-grid minor;
+    %Auflösung 
+    n = 30;
+    %X-Y Ebene aufspannen und Funktionswert für jeden Punkt ermitteln
+    x = linspace(xmin,xmax,n);
+    y = linspace(ymin,ymax,n);
+    [X,Y] = meshgrid(x,y);
+    Z = fit(X,Y);
+
+    %Funktion plotten
+    figure(1);
+    subplot(1,2,1);
+    mesh(X,Y,Z);
+    xlabel('x','FontSize',13,'FontWeight','bold'); 
+    ylabel('y','FontSize',13,'FontWeight','bold'); 
+    zlabel('z','FontSize',13,'FontWeight','bold'); 
+    title('Funktionsplot');
+    grid minor;
 
 
 %%------------------------------------------------------------------------
 %% Optimierungsverlauf als Contourplot/Höhenlinien visualisieren
 %%------------------------------------------------------------------------
 
-%Kleinsten Funktionswert ermitteln und diesen als kleinste Höhenlinie
-%festlegen (floor: auf int abrunden)
-zmin = floor(min(Z(:)));
-%Größten Funktionswert ermitteln und diesen als höchste Höhenlinie
-%festlegen (ceil auf int aufrunden)
-zmax = ceil(max(Z(:)));
-%Anzahl der Höhenlinienunterschiede
-n_contour = 50;
-%Schrittweite zwischen den Höhenlinien ermitteln
-zinc = (zmax - zmin) / (n_contour-1);
-%Höhenlinien ermitteln (auf Z bezogen)
-zlevs = zmin:zinc:zmax;
+    %Kleinsten Funktionswert ermitteln und diesen als kleinste Höhenlinie
+    %festlegen (floor: auf int abrunden)
+    zmin = floor(min(Z(:)));
+    %Größten Funktionswert ermitteln und diesen als höchste Höhenlinie
+    %festlegen (ceil auf int aufrunden)
+    zmax = ceil(max(Z(:)));
+    %Anzahl der Höhenlinienunterschiede
+    n_contour = 50;
+    %Schrittweite zwischen den Höhenlinien ermitteln
+    zinc = (zmax - zmin) / (n_contour-1);
+    %Höhenlinien ermitteln (auf Z bezogen)
+    zlevs = zmin:zinc:zmax;
 
-%Funktion mit Höhenlinien und Startpunkt plotten
-subplot(1,2,2);
-contour(X,Y,Z,zlevs,'Fill','on')
-colorbar;
-xlabel('x','FontSize',13,'FontWeight','bold');  
-ylabel('y','FontSize',13,'FontWeight','bold'); 
-title('Höhenlinien');
-grid minor;
+    %Funktion mit Höhenlinien und Startpunkt plotten
+    subplot(1,2,2);
+    contour(X,Y,Z,zlevs,'Fill','on')
+    colorbar;
+    xlabel('x','FontSize',13,'FontWeight','bold');  
+    ylabel('y','FontSize',13,'FontWeight','bold'); 
+    title('Höhenlinien');
+    grid minor;
+
+end
 
 
 %%------------------------------------------------------------------------
@@ -86,40 +109,54 @@ grid minor;
 %%------------------------------------------------------------------------
 
 Population = zeros(3,popsize);
+%               |      |      |       |            |  
+%_______________|__c1__|__c2__|__c..__|__cpopsize__|
+%               |      |      |       |            |
+%_x-Koordinate*_|__x1__|__x2__|__x..__|__xpopsize__|
+%               |      |      |       |            |
+%_y-Koordinate*_|__y1__|__y2__|__y..__|__ypopsize__|
+%               |      |      |       |            |
+%__Fitnesswert__|__f1__|__f2__|__f..__|__fpopsize__|
+%
+%*=Koordinate im Suchraum der Funktion (Scalar) oder
+%Codierter Bitstring 
+
+%Speicher für besten Fitnesswert
 best = [0,0,inf];
 
-for i=1:1:popsize
-    
-    %x- und y-Wert zufällig gleichverteilt ermitteln innerhalb des
-    %Suchraums
-    Population(1,i) = random('unif',xmin,xmax);
-    Population(2,i) = random('unif',ymin,ymax);
-    
-    %Fitnesswerte berechnen
-    Population(3,1) = fit(Population(1,i),Population(2,i));
-    
+%x- und y-Werte zufällig gleichverteilt ermitteln innerhalb des
+%Suchraums (popsize-mal)
+Population(1,:) = random('unif',xmin,xmax,1,popsize);
+Population(2,:) = random('unif',ymin,ymax,1,popsize);
+
+%Fitnesswerte berechnen
+Population(3,:) = fit(Population(1,:),Population(2,:));
+
+%Beste Fitness suchen
+[bestVal,bestIdx] = min(Population(3,:));
+if bestVal < best(3)
+    best(:) = Population(:,bestIdx);
+end
+         
+
+if PLOT == true
     %Anfangspopulation plotten
     subplot(1,2,1);
     hold on;
-    plot3(Population(1,i),Population(2,i),Population(3,i),'k+','MarkerSize',8);
-    
+    plot3(Population(1,:),Population(2,:),Population(3,:),'k+','MarkerSize',8);
+
     subplot(1,2,2);
     hold on;
-    plot(Population(1,i),Population(2,i),'k+','MarkerSize',8);
-    
-    %Beste Fitness suchen
-    if Population(3,i) < best(3)
-       best(:) = Population(:,i);
-    end
-    
+    plot(Population(1,:),Population(2,:),'k+','MarkerSize',8);
+
+    %Beste Fitness plotten
+    subplot(1,2,1);
+    hold on;
+    plot3(best(1),best(2),best(3),'r+','MarkerSize',20);
+    subplot(1,2,2);
+    hold on;
+    plot(best(1),best(2),'r+','MarkerSize',20);
 end
-%Beste Fitness plotten
-subplot(1,2,1);
-hold on;
-plot3(best(1),best(2),best(3),'r+','MarkerSize',20);
-subplot(1,2,2);
-hold on;
-plot(best(1),best(2),'r+','MarkerSize',20);
 
 
 
@@ -127,8 +164,17 @@ plot(best(1),best(2),'r+','MarkerSize',20);
 %% Hauptschleife: Mehrere Generationen durchlaufen
 %%------------------------------------------------------------------------
 
-%Anzahl der Ausgabeunterbrechungen der Schritte
+%Abbruchbedingung: Bei wievielen Generationswechseln ohne Verbesserung der
+%Fitness
+Max_Gen = 50;
+%Zähler für Generationen ohne Fitnessverbesserung
+Gen_Counter = 0;
+%Merker für Anzahl der Generationen bis gute Näherung erreicht wird 
+Best_Counter = g_max;
+
+%Anzahl der Ausgabeupdtaes pro Funktionsaufrauf
 update_steps = 10;
+
 %Children Population anlegen
 Children = zeros(3,popsize);
 
@@ -142,9 +188,11 @@ for g=2:1:g_max
     %-------------------
     % 2. Selektion
     %-------------------
+    
     %Gesamtfitness berechnen aller Chromosome
     tot_fit = sum(Population(3,:));
-    %Später löschen:
+    
+    %Später löschen/ersetzen:
     Children = Population;
     
     %Selektiosalgorithmus: Roulette !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -172,60 +220,78 @@ for g=2:1:g_max
     
     
     %-------------------
-    % 6. Neue Fitnesswerte berechnen und Population überschreiben
+    % 6. Neue Fitnesswerte berechnen &
+    % Rekombination 
     %-------------------
-    Children(3,i) = fit(Children(1,i),Children(1,i));
-    Population = Children;
     
-    %Beste Fitness suchen 
-    for i=1:1:popsize
-      if Population(i,3) < best(3)
-       best(:) = Population(i,:);
-       %Iterationschritte/Generationen bis Divergenz speichern
-       Max_Gen = g;
-      end 
+    %Neue Fitnesswerte berechnen
+    Children(3,:) = fit(Children(1,:),Children(2,:));
+    
+    %Erstellen einer neuen Generation aus alter und children Generation
+    Population = Rekombination(Population, Children, popsize,1,0);
+    
+    %Beste Fitness suchen aus neuer Population 
+    [bestVal,bestIdx] = min(Population(3,:));
+    if bestVal < best(3)
+        best(:) = Population(:,bestIdx);
+        Best_Counter = g;
+        Gen_Counter = 0;
+    else
+        Gen_Counter = Gen_Counter + 1;
     end
+    
  
     %-------------------
     % Ausgaben/Plots
     %-------------------
-    
-    if (mod(g,floor(g_max/update_steps))==0) 
-        figure(1);
-        %Funktion plotten mit neuer Generation
-        subplot(1,2,1);
-        mesh(X,Y,Z);
-        xlabel('x','FontSize',13,'FontWeight','bold'); 
-        ylabel('y','FontSize',13,'FontWeight','bold'); 
-        zlabel('z','FontSize',13,'FontWeight','bold'); 
-        title('Funktionsplot');
-        grid minor;
-        hold on;
-        plot3(Population(:,1),Population(:,2),Population(:,3),'k+','MarkerSize',8);
-        hold on;
-        plot3(best(1),best(2),best(3),'r+','MarkerSize',20);
-        hold off;
-        
+    if PLOT == true
+        if (mod(g,floor(g_max/update_steps))==0) 
+            figure(1);
+            %Funktion plotten mit neuer Generation
+            subplot(1,2,1);
+            mesh(X,Y,Z);
+            xlabel('x','FontSize',13,'FontWeight','bold'); 
+            ylabel('y','FontSize',13,'FontWeight','bold'); 
+            zlabel('z','FontSize',13,'FontWeight','bold'); 
+            title('Funktionsplot');
+            grid minor;
+            hold on;
+            plot3(Population(1,:),Population(2,:),Population(3,:),'k+','MarkerSize',8);
+            hold on;
+            plot3(best(1),best(2),best(3),'r+','MarkerSize',20);
+            hold off;
 
-        %Höhenlinien plotten mit neuer Generation
-        subplot(1,2,2);
-        contour(X,Y,Z,zlevs,'Fill','on')
-        colorbar;
-        xlabel('x','FontSize',13,'FontWeight','bold');  
-        ylabel('y','FontSize',13,'FontWeight','bold'); 
-        title('Höhenlinien');
-        grid minor;
-        hold on;
-        plot(Population(:,1),Population(:,2),'k+','MarkerSize',8);
-        hold on
-        plot(best(1),best(2),'r+','MarkerSize',20);
-        hold off
-        %pause(1);
+
+            %Höhenlinien plotten mit neuer Generation
+            subplot(1,2,2);
+            contour(X,Y,Z,zlevs,'Fill','on')
+            colorbar;
+            xlabel('x','FontSize',13,'FontWeight','bold');  
+            ylabel('y','FontSize',13,'FontWeight','bold'); 
+            title('Höhenlinien');
+            grid minor;
+            hold on;
+            plot(Population(1,:),Population(2,:),'k+','MarkerSize',8);
+            hold on
+            plot(best(1),best(2),'r+','MarkerSize',20);
+            hold off
+            %pause(1);
+        end
     end
     
     %-------------------
     % 7. Abbruchbedingung
     %-------------------
+    
+    %Euklidischer Abstand zwischen optimaler Lösung und gefundener Lösung
+    %distance = sqrt((opt(1)-best(1)^2) + (opt(2)-best(2)^2) + (opt(3)-best(3)^2));
+    
+    %Abstand der Fitness
+    accuracy = abs(opt(3)-best(3));
+    
+    if ((accuracy <= dopt) || (Gen_Counter > Max_Gen)) && BREAK == true
+       break; 
+    end
     
 end
 
