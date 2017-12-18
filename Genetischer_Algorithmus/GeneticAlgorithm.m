@@ -1,6 +1,6 @@
-function [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, fit, xmin, xmax, ymin, ymax, popsize,opt,dopt)
+function [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, fit, xmin, xmax, ymin, ymax, popsize, fun_sel, fun_cro, fun_mut, fun_rek, opt, dopt)
 
-% Aufruf:    [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, fit, xmin, xmax, ymin, ymax, popsize, sel_fun, cro_fun, mut_fun,opt,dopt)
+% Aufruf:    [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, fit, xmin, xmax, ymin, ymax, popsize, fun_sep, fun_cro, fun_mut, fun_rek, opt, dopt)
 % g_max:     maximale Anzahl Iterationen/Generationen Default: 1000
 % fit:       Fitnessfunktion: Funktionsargument Default: @fRosenbrock
 % xmin:      minimaler Wert für x (Suchbereich in der Funktion) Default: -3
@@ -8,12 +8,14 @@ function [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, fit, xmin, xm
 % ymin:      minimaler Wert für y (Suchbereich in der Funktion) Default: -3
 % ymax:      maximaler Wert für y (Suchbereich in der Funktion) Default: 3
 % popsize:   Größe der Anfangspopulation Default: 10
-% sel_fun:   Selektionsalgortihmus Default: @fRoulette
-% cro_fun:   Cross-Over Algorithmus Default: @f
-% mut_fun:   Mutations Algorithmus Default: @f
+% fun_sel:   Selektionsalgortihmus Default: 
+% fun_cro:   Cross-Over Algorithmus Default: 
+% fun_mut:   Mutations Algorithmus Default: 
+% fun_rek:   Rekombinations Algorithmus Default: 'elite' 
 % opt:       "optimale" Lösung des Minimierungsproblems (näherungsweise)
 %            Default: [1;,1; 0] --> für Rosenbrock
-% dopt:      Mindestgenuigkeit zwischen opt und loesung --> Abbruchbedingung Default: 1e-5 
+% dopt:      Mindestgenuigkeit zwischen opt und loesung --> Abbruchbedingung Default: -inf
+%            --> kein Abbruch
 
 % loesung:   [x_min; x_max; f_min]
 % Best_Counter: Iterationen/Generationen für Näherung
@@ -29,7 +31,7 @@ function [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, fit, xmin, xm
 PLOT = false;
 
 %Abbruchbediengung ein/ausschalten
-BREAK = true;
+BREAK = false;
 
 
 %%------------------------------------------------------------------------
@@ -43,9 +45,10 @@ if ~exist('xmax','var') xmax = 3; end
 if ~exist('ymin','var') ymin = -3; end
 if ~exist('ymax','var') ymax = 3; end
 if ~exist('popsize','var') popsize = 10; end
-%if ~exist('sel_fun','var') sel_fun = @; end
-%if ~exist('cro_fun','var') cro_fun = @; end
-%if ~exist('mut_fun','var') mut_fun = @; end
+if ~exist('fun_sel','var') fun_sel = 'abc'; end
+if ~exist('fun_cro','var') fun_cro = 'abc'; end
+if ~exist('fun_mut','var') fun_mut = 'abc'; end
+if ~exist('fun_rek','var') fun_rek = 'no_elite'; end
 if ~exist('opt','var') opt = [1;,1; 0]; end
 if ~exist('dopt','var') dopt = 1e-5; end
 
@@ -228,7 +231,7 @@ for g=2:1:g_max
     Children(3,:) = fit(Children(1,:),Children(2,:));
     
     %Erstellen einer neuen Generation aus alter und children Generation
-    Population = Rekombination(Population, Children, popsize,1,0);
+    Population = Rekombination(Population, Children, popsize,fun_rek,1,0);
     
     %Beste Fitness suchen aus neuer Population 
     [bestVal,bestIdx] = min(Population(3,:));
