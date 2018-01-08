@@ -35,6 +35,9 @@ PLOT = false;
 %Abbruchbediengung ein/ausschalten
 BREAK = false;
 
+%GIF Erstellen ein/ausschalten
+GIF = false;
+
 
 %%------------------------------------------------------------------------
 %% Default Werte festlegen
@@ -50,7 +53,7 @@ if ~exist('popsize','var') popsize = 10; end
 if ~exist('fun_sel','var') fun_sel = 'abc'; end
 if ~exist('fun_cro','var') fun_cro = 'abc'; end
 if ~exist('fun_mut','var') fun_mut = 'abc'; end
-if ~exist('fun_rek','var') fun_rek = 'no_elite'; end
+if ~exist('fun_rek','var') fun_rek = 'elite'; end
 if ~exist('cro_w','var') cro_w = 0.2; end
 if ~exist('mut_w','var') mut_w = 0.1; end
 if ~exist('opt','var') opt = [1;,1; 0]; end
@@ -62,7 +65,7 @@ if ~exist('dopt','var') dopt = 1e-5; end
 %%------------------------------------------------------------------------
 
 if PLOT == true
-
+    
     %Auflösung 
     n = 30;
     %X-Y Ebene aufspannen und Funktionswert für jeden Punkt ermitteln
@@ -72,7 +75,7 @@ if PLOT == true
     Z = fit(X,Y);
 
     %Funktion plotten
-    figure(1);
+    figurehandler = figure(1);
     subplot(1,2,1);
     mesh(X,Y,Z);
     xlabel('x','FontSize',13,'FontWeight','bold'); 
@@ -163,6 +166,16 @@ if PLOT == true
     subplot(1,2,2);
     hold on;
     plot(best(1),best(2),'r+','MarkerSize',20);
+    
+    %GIF erstellen
+    if GIF == true
+        filenameGIF = 'AnimatedImage.gif';
+        image = getframe(figurehandler);
+        gifimage = frame2im(image); 
+        [imind,cm] = rgb2ind(gifimage,256); 
+        imwrite(imind,cm,filenameGIF,'gif', 'Loopcount',inf); 
+    end
+
 end
 
 
@@ -184,6 +197,8 @@ update_steps = 10;
 
 %Children Population anlegen
 Children = zeros(3,popsize);
+
+StartGIF = 1;
 
 for g=2:1:g_max
     
@@ -282,6 +297,15 @@ for g=2:1:g_max
             hold on
             plot(best(1),best(2),'r+','MarkerSize',20);
             hold off
+            
+            %GIF erstellen
+            if GIF == true
+                image = getframe(figurehandler);
+                gifimage = frame2im(image); 
+                [imind,cm] = rgb2ind(gifimage,256); 
+                imwrite(imind,cm,filenameGIF,'gif','WriteMode','append','DelayTime',0.2);
+            end
+   
             %pause(1);
         end
     end
