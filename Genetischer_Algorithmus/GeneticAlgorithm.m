@@ -1,6 +1,6 @@
-function [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, fit, xmin, xmax, ymin, ymax, popsize, fun_sel, fun_cro, fun_mut, fun_rek, opt, dopt)
+function [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, fit, xmin, xmax, ymin, ymax, popsize, fun_sel, fun_cro, fun_mut, fun_rek, cro_w, mut_w, opt, dopt);
 
-% Aufruf:    [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, fit, xmin, xmax, ymin, ymax, popsize, fun_sep, fun_cro, fun_mut, fun_rek, opt, dopt)
+% Aufruf:    [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, fit, xmin, xmax, ymin, ymax, popsize, fun_sep, fun_cro, fun_mut, fun_rek, cro_w, mut_w, opt, dopt);
 % g_max:     maximale Anzahl Iterationen/Generationen Default: 1000
 % fit:       Fitnessfunktion: Funktionsargument Default: @fRosenbrock
 % xmin:      minimaler Wert für x (Suchbereich in der Funktion) Default: -3
@@ -12,6 +12,8 @@ function [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, fit, xmin, xm
 % fun_cro:   Cross-Over Algorithmus Default: 
 % fun_mut:   Mutations Algorithmus Default: 
 % fun_rek:   Rekombinations Algorithmus Default: 'elite' 
+% cro_w:     Cross-Over Wahrscheinlichkeit Default: 0.2
+% mut_w:     Mutationswahrscheinlichekit Default: 0.1
 % opt:       "optimale" Lösung des Minimierungsproblems (näherungsweise)
 %            Default: [1;,1; 0] --> für Rosenbrock
 % dopt:      Mindestgenuigkeit zwischen opt und loesung --> Abbruchbedingung Default: -inf
@@ -49,6 +51,8 @@ if ~exist('fun_sel','var') fun_sel = 'abc'; end
 if ~exist('fun_cro','var') fun_cro = 'abc'; end
 if ~exist('fun_mut','var') fun_mut = 'abc'; end
 if ~exist('fun_rek','var') fun_rek = 'no_elite'; end
+if ~exist('cro_w','var') cro_w = 0.2; end
+if ~exist('mut_w','var') mut_w = 0.1; end
 if ~exist('opt','var') opt = [1;,1; 0]; end
 if ~exist('dopt','var') dopt = 1e-5; end
 
