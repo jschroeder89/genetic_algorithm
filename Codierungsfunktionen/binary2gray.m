@@ -1,6 +1,7 @@
 function [gray_pop] = binary2gray(pop)
     popsize = length(pop(1,:));
     nbits = length(pop(1,1));
+    gray_pop = pop;
     for j = 1:2        
         for i = 1:popsize
             C = pop(j,i);
