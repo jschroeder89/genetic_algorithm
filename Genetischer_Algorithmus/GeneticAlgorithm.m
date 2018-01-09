@@ -24,19 +24,18 @@ function [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, fit, xmin, xm
 % accuracy:  Abweichung zwischen gefundener Lösung und "Optimum" -->
 %            Genauigekit
 
-
 %%------------------------------------------------------------------------
 %% Einstellungen
 %%------------------------------------------------------------------------
 
 %Ausgabe von Plots ein/ausschalten
-PLOT = false;
+PLOT = true;
 
 %Abbruchbediengung ein/ausschalten
 BREAK = false;
 
 %GIF Erstellen ein/ausschalten
-GIF = false;
+GIF = true;
 
 
 %%------------------------------------------------------------------------
@@ -58,6 +57,15 @@ if ~exist('cro_w','var') cro_w = 0.2; end
 if ~exist('mut_w','var') mut_w = 0.1; end
 if ~exist('opt','var') opt = [1;,1; 0]; end
 if ~exist('dopt','var') dopt = 1e-5; end
+
+
+%%------------------------------------------------------------------------
+%% Relative Pfade angeben für Codierung/Selektion/Cross-Over/Mutation/Rekombination
+%%------------------------------------------------------------------------
+
+addpath('../Codierungsfunktionen');
+addpath('../Selektionsfunktionen');
+addpath('../BMO_Crossover_und_Mutation');
 
 
 %%------------------------------------------------------------------------
@@ -198,7 +206,6 @@ update_steps = 10;
 %Children Population anlegen
 Children = zeros(3,popsize);
 
-StartGIF = 1;
 
 for g=2:1:g_max
     
@@ -206,6 +213,7 @@ for g=2:1:g_max
     % 1. Codierung der Generation
     %-------------------
     
+    [Pop_coded] = binary_coding(Population, xmax, xmin, ymax, ymin)
     
     %-------------------
     % 2. Selektion

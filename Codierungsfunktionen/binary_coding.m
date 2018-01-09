@@ -1,4 +1,4 @@
-function [Gen_coded] = binary_conding(Gen, xmax, xmin, ymax, ymin)
+function [Gen_coded] = binary_coding(Gen, xmax, xmin, ymax, ymin)
 %%Init
 Gen_coded = cell(size(Gen));
 Sx = abs(xmin) + abs(xmax);
