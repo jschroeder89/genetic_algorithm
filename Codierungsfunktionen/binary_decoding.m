@@ -15,4 +15,8 @@ for i = 1:size(Gen_coded(1,:), 2)
     Gen_decoded(2, i) = Cy;
 end
 
+for i = 1:length(Gen_decoded(3,:))
+    Gen_decoded(3, i) = str2double(Gen_coded(3, i));
+end
+
 end

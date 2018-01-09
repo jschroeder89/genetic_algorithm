@@ -16,4 +16,8 @@ for i = 1:size(Gen(1,:), 2)
     Gen_coded(2, i) = cellstr(Cyb);
 end
 
+for i = 1:length(Gen(3,:))
+    Gen_coded(3,i) = cellstr(num2str(Gen(3,i)));
+end
+
 end
