@@ -3,7 +3,7 @@ function [gray_pop] = gray_coding(pop)
     nbits = length(pop(1,1));
     for j = 1:2        
         for i = 1:popsize
-            C = pop(i,j);
+            C = pop(j,i);
             if class(C) == 'cell'
                 C = char(C);
             end
@@ -20,7 +20,7 @@ function [gray_pop] = gray_coding(pop)
                 mask_g = str2num(mask(i));
                 gray_coded(i) = num2str(xor(Cg, mask_g));
             end
-            gray_pop(i, j) = gray_coded;
+            gray_pop(j, i) = gray_coded;
         end
     end
 end

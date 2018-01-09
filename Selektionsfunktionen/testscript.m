@@ -21,6 +21,6 @@ fit_norm = [0.1 0.2 0.25 0.05 0.05 0.35];
 %explode = [1 1 1 1 1 1];
 %pie(x, explode);
 %elite_selekt(2, pop);
-%norm_fit(pop);
+norm_fit(pop)
 
 

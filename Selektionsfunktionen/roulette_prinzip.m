@@ -1,6 +1,6 @@
-function [sel pos] = roulette_prinzip(pop)
+function [sel pos] = roulette_prinzip(fitness)
     %fit_sorted = sort(pop, 'ascend');
-    fitness = pop(3,:);
+    %fitness = pop(3,:);
     fit_sum = sum(fitness);
     r = rand(fit_sum);
     val = pop(1);
