@@ -29,7 +29,7 @@ function [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, fit, xmin, xm
 %%------------------------------------------------------------------------
 
 %Ausgabe von Plots ein/ausschalten
-PLOT = false;
+PLOT = true;
 
 %Abbruchbediengung ein/ausschalten
 BREAK = false;
@@ -53,8 +53,8 @@ if ~exist('fun_sel','var') fun_sel = 'abc'; end
 if ~exist('fun_cro','var') fun_cro = 'n_point_crossover'; end
 if ~exist('fun_mut','var') fun_mut = 'abc'; end
 if ~exist('fun_rek','var') fun_rek = 'elite'; end
-if ~exist('cro_w','var') cro_w = 1; end
-if ~exist('mut_w','var') mut_w = 1; end
+if ~exist('cro_w','var') cro_w = 0.3; end
+if ~exist('mut_w','var') mut_w = 0.1; end
 if ~exist('opt','var') opt = [1;,1; 0]; end
 if ~exist('dopt','var') dopt = 1e-5; end
 
@@ -214,6 +214,7 @@ for g=2:1:g_max
     %-------------------
     
     [Population_coded] = binary_coding(Population, xmax, xmin, ymax, ymin);
+    [Population_coded] = binary2gray(Population_coded);
     
     %-------------------
     % 2. Selektion
@@ -244,7 +245,26 @@ for g=2:1:g_max
     % 5. Dekodierung
     %-------------------
     
+    [Children_coded] = gray2binary(Children_coded);
+    [Children] = binary_decoding(Children_coded, xmax, xmin, ymax, ymin);
     
+    %Punkte innerhalb des Suchraums setzen (falls durch CrossOver etc
+    %außerhalb)
+    for i = 1:size(Children,2)
+    
+        if Children(1,i) > xmax
+            Children(1,i) = xmax;
+        elseif Children(1,i) < xmin
+            Children(1,i) = xmin;
+        end
+        
+        if Children(2,i) > ymax
+            Children(2,i) = ymax;
+        elseif Children(2,i) < ymin
+            Children(2,i) = ymin;
+        end
+        
+    end
     
     %-------------------
     % 6. Neue Fitnesswerte berechnen &
@@ -252,10 +272,10 @@ for g=2:1:g_max
     %-------------------
     
     %Neue Fitnesswerte berechnen
-    Children_coded(3,:) = fit(Children_coded(1,:),Children_coded(2,:));
+    Children(3,:) = fit(Children(1,:),Children(2,:));
     
     %Erstellen einer neuen Generation aus alter und children Generation
-    Population = Rekombination(Population, Children_coded, popsize,fun_rek,1,0);
+    Population = Rekombination(Population, Children, popsize,fun_rek,1,0);
     
     %Beste Fitness suchen aus neuer Population 
     [bestVal,bestIdx] = min(Population(3,:));
@@ -333,3 +353,4 @@ end
 
 % Ausgabe des bisher besten Punkts
 loesung = best(:);
+

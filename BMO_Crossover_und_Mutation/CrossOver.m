@@ -59,6 +59,9 @@ if rand(1) <= cro_w
         Population_new{2,rand_num(i)} = tmp_Gen_coded{2,i};
     end
 
+    
+else
+    Population_new = Population_old;
 end
 
 end
