@@ -17,6 +17,10 @@ g_max = 100;
 %Abbruchbedingung: Mindestgenauigkeit der Lösungen
 dopt = 1e-5;
 
+%Cross-Over und Mutationswahrscheinlichkeit 
+cro_w = 0.4;
+mut_w = 0.5;
+
 %----Parameter für Testumgebung-------
 %Testdurchläufe pro Einstellparameter 
 Max_It = 2;
@@ -109,7 +113,7 @@ for s=1:1:numfun_s
                     xmin = -2; xmax = 2; ymin = -2; ymax = 2;
                     opt = [1, 1, 0];
                     
-                    [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, @fRosenbrock, xmin, xmax, ymin, ymax, popsize, fun_sep(s), fun_cro(c), fun_mut(m), fun_rek(r), opt, dopt);
+                    [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, @fRosenbrock, xmin, xmax, ymin, ymax, popsize, fun_sep(s), fun_cro(c), fun_mut(m), fun_rek(r), cro_w, mut_w, opt, dopt);
                     
                     acc_sum(1) = acc_sum(1) + accuracy;
                     it_sum(1) = it_sum(1) + Best_Counter;
@@ -123,7 +127,7 @@ for s=1:1:numfun_s
                     xmin = -450; xmax = 450; ymin = -450; ymax = 450;
                     opt = [420.9687, 420.9687, -837.9658];
                     
-                    [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, @fSchwefel, xmin, xmax, ymin, ymax, popsize, fun_sep(s), fun_cro(c), fun_mut(m), fun_rek(r), opt, dopt);
+                    [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, @fSchwefel, xmin, xmax, ymin, ymax, popsize, fun_sep(s), fun_cro(c), fun_mut(m), fun_rek(r), cro_w, mut_w, opt, dopt);
 
                     acc_sum(2) = acc_sum(2) + accuracy;
                     it_sum(2) = it_sum(3) + Best_Counter;
@@ -136,7 +140,7 @@ for s=1:1:numfun_s
                     xmin = -40; xmax = 40; ymin = -40; ymax = 40;
                     opt = [-31.978, -31.978, 1.002];
                     
-                    [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, @fShekelsFuchsbauten, xmin, xmax, ymin, ymax, popsize, fun_sep(s), fun_cro(c), fun_mut(m), fun_rek(r), opt, dopt);
+                    [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, @fShekelsFuchsbauten, xmin, xmax, ymin, ymax, popsize, fun_sep(s), fun_cro(c), fun_mut(m), fun_rek(r), cro_w, mut_w, opt, dopt);
 
                     acc_sum(3) = acc_sum(3) + accuracy;
                     it_sum(3) = it_sum(3) + Best_Counter;
@@ -149,7 +153,7 @@ for s=1:1:numfun_s
                     xmin = -5; xmax = 5; ymin = -5; ymax = 5;
                     opt = [0, 0, 0];
                     
-                    [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, @fRastrigins, xmin, xmax, ymin, ymax, popsize, fun_sep(s), fun_cro(c), fun_mut(m), fun_rek(r), opt, dopt);
+                    [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, @fRastrigins, xmin, xmax, ymin, ymax, popsize, fun_sep(s), fun_cro(c), fun_mut(m), fun_rek(r), cro_w, mut_w, opt, dopt);
 
                     acc_sum(4) = acc_sum(4) + accuracy;
                     it_sum(4) = it_sum(4) + Best_Counter;
@@ -162,7 +166,7 @@ for s=1:1:numfun_s
                     xmin = -5; xmax = 5; ymin = -5; ymax = 5;
                     opt = [0, 0, 0];
                     
-                    [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, @fBaecksTreppenfunktion, xmin, xmax, ymin, ymax, popsize, fun_sep(s), fun_cro(c), fun_mut(m), fun_rek(r), opt, dopt);
+                    [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, @fBaecksTreppenfunktion, xmin, xmax, ymin, ymax, popsize, fun_sep(s), fun_cro(c), fun_mut(m), fun_rek(r), cro_w, mut_w, opt, dopt);
                     
                     acc_sum(5) = acc_sum(5) + accuracy;
                     it_sum(5) = it_sum(5) + Best_Counter;
@@ -175,7 +179,7 @@ for s=1:1:numfun_s
                     xmin = -100; xmax = 100; ymin = -100; ymax = 100;
                     opt = [0, 0, 0];
                     
-                    [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, @fGriewangks, xmin, xmax, ymin, ymax, popsize, fun_sep(s), fun_cro(c), fun_mut(m), fun_rek(r), opt, dopt);
+                    [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, @fGriewangks, xmin, xmax, ymin, ymax, popsize, fun_sep(s), fun_cro(c), fun_mut(m), fun_rek(r), cro_w, mut_w, opt, dopt);
                     
                     acc_sum(6) = acc_sum(6) + accuracy;
                     it_sum(6) = it_sum(6) + Best_Counter;
@@ -188,7 +192,7 @@ for s=1:1:numfun_s
                     xmin = -30; xmax = 30; ymin = -30; ymax = 30;
                     opt = [0, 0, 0];
                      
-                    [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, @fAckleysFunktion, xmin, xmax, ymin, ymax, popsize, fun_sep(s), fun_cro(c), fun_mut(m), fun_rek(r), opt, dopt);
+                    [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, @fAckleysFunktion, xmin, xmax, ymin, ymax, popsize, fun_sep(s), fun_cro(c), fun_mut(m), fun_rek(r), cro_w, mut_w, opt, dopt);
                     
                     acc_sum(7) = acc_sum(7) + accuracy;
                     it_sum(7) = it_sum(7) + Best_Counter;
@@ -202,7 +206,7 @@ for s=1:1:numfun_s
                     xmin = -5; xmax = 5; ymin = -5; ymax = 5;
                     opt = [-5, -5, -10];
                     
-                    [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, @fTreppenfunktion, xmin, xmax, ymin, ymax, popsize, fun_sep(s), fun_cro(c), fun_mut(m), fun_rek(r), opt, dopt);
+                    [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, @fTreppenfunktion, xmin, xmax, ymin, ymax, popsize, fun_sep(s), fun_cro(c), fun_mut(m), fun_rek(r), cro_w, mut_w, opt, dopt);
                     
                     acc_sum(8) = acc_sum(8) + accuracy;
                     it_sum(8) = it_sum(8) + Best_Counter;
@@ -226,7 +230,7 @@ for s=1:1:numfun_s
 end
 
 %Ergebnisse auf Festplatte speichern
-save('Testergebnisse.mat','acc_storage','it_storage');
+save('Testergebnisse.mat','acc_storage','it_storage','popsize','cro_w','mut_w');
     
 
 
