@@ -1,6 +1,6 @@
 function [binary_pop] = gray2binary(Cg)
-popsize = length(pop(1,:));
-nbits = length(pop(1,1));
+    popsize = length(pop(1,:));
+    nbits = length(pop(1,1));
     for j = 1:2
         for i = 1:popsize
             Cg = pop(j, i);
@@ -16,7 +16,7 @@ nbits = length(pop(1,1));
                 Cbin = str2num(binary_coded(k-1));   
                 binary_coded(k) = num2str(xor(Cgray, Cbin)); 
             end
-            binary_pop(j,i) = binary_coded;         
+            binary_pop(j, i) = cellstr(binary_coded);         
         end
     end
 end

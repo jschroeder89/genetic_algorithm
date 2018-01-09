@@ -20,7 +20,7 @@ function [gray_pop] = binary2gray(pop)
                 mask_g = str2num(mask(k));
                 gray_coded(k) = num2str(xor(Cg, mask_g));
             end
-            gray_pop(j, i) = gray_coded;
+            gray_pop(j, i) = cellstr(gray_coded);
         end
     end
 end
