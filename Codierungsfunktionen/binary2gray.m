@@ -15,10 +15,10 @@ function [gray_pop] = binary2gray(pop)
             C = dec2bin(C, nbits);
             mask = dec2bin(mask, nbits);
 
-            for i = 1:nbits
-                Cg = str2num(C(i));
-                mask_g = str2num(mask(i));
-                gray_coded(i) = num2str(xor(Cg, mask_g));
+            for k = 1:nbits
+                Cg = str2num(C(k));
+                mask_g = str2num(mask(k));
+                gray_coded(k) = num2str(xor(Cg, mask_g));
             end
             gray_pop(j, i) = gray_coded;
         end

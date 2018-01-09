@@ -11,10 +11,10 @@ nbits = length(pop(1,1));
             nbits = length(Cg);
             binary_coded(1) = Cg(1);
 
-            for i = 2:nbits
-                Cgray = str2num(Cg(i));
-                Cbin = str2num(binary_coded(i-1));   
-                binary_coded(i) = num2str(xor(Cgray, Cbin)); 
+            for k = 2:nbits
+                Cgray = str2num(Cg(k));
+                Cbin = str2num(binary_coded(k-1));   
+                binary_coded(k) = num2str(xor(Cgray, Cbin)); 
             end
             binary_pop(j,i) = binary_coded;         
         end
