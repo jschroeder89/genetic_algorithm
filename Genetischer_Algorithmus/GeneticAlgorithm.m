@@ -9,11 +9,11 @@ function [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, fit, xmin, xm
 % ymax:      maximaler Wert für y (Suchbereich in der Funktion) Default: 3
 % popsize:   Größe der Anfangspopulation Default: 10
 % fun_sel:   Selektionsalgortihmus Default: 
-% fun_cro:   Cross-Over Algorithmus Default: 
+% fun_cro:   Cross-Over Algorithmus Default: 'n_point_crossover'
 % fun_mut:   Mutations Algorithmus Default: 
 % fun_rek:   Rekombinations Algorithmus Default: 'elite' 
-% cro_w:     Cross-Over Wahrscheinlichkeit Default: 0.2
-% mut_w:     Mutationswahrscheinlichekit Default: 0.1
+% cro_w:     Cross-Over Wahrscheinlichkeit Default: 1
+% mut_w:     Mutationswahrscheinlichekit Default: 1
 % opt:       "optimale" Lösung des Minimierungsproblems (näherungsweise)
 %            Default: [1;,1; 0] --> für Rosenbrock
 % dopt:      Mindestgenuigkeit zwischen opt und loesung --> Abbruchbedingung Default: -inf
@@ -29,13 +29,13 @@ function [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, fit, xmin, xm
 %%------------------------------------------------------------------------
 
 %Ausgabe von Plots ein/ausschalten
-PLOT = true;
+PLOT = false;
 
 %Abbruchbediengung ein/ausschalten
 BREAK = false;
 
 %GIF Erstellen ein/ausschalten
-GIF = true;
+GIF = false;
 
 
 %%------------------------------------------------------------------------
@@ -50,11 +50,11 @@ if ~exist('ymin','var') ymin = -3; end
 if ~exist('ymax','var') ymax = 3; end
 if ~exist('popsize','var') popsize = 10; end
 if ~exist('fun_sel','var') fun_sel = 'abc'; end
-if ~exist('fun_cro','var') fun_cro = 'abc'; end
+if ~exist('fun_cro','var') fun_cro = 'n_point_crossover'; end
 if ~exist('fun_mut','var') fun_mut = 'abc'; end
 if ~exist('fun_rek','var') fun_rek = 'elite'; end
-if ~exist('cro_w','var') cro_w = 0.2; end
-if ~exist('mut_w','var') mut_w = 0.1; end
+if ~exist('cro_w','var') cro_w = 1; end
+if ~exist('mut_w','var') mut_w = 1; end
 if ~exist('opt','var') opt = [1;,1; 0]; end
 if ~exist('dopt','var') dopt = 1e-5; end
 
@@ -213,7 +213,7 @@ for g=2:1:g_max
     % 1. Codierung der Generation
     %-------------------
     
-    [Pop_coded] = binary_coding(Population, xmax, xmin, ymax, ymin)
+    [Population_coded] = binary_coding(Population, xmax, xmin, ymax, ymin);
     
     %-------------------
     % 2. Selektion
@@ -223,7 +223,7 @@ for g=2:1:g_max
     tot_fit = sum(Population(3,:));
     
     %Später löschen/ersetzen:
-    Children = Population;
+    %Children = Population;
     
     %Selektiosalgorithmus: Roulette !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     %Children = sel_fun(Population);
@@ -232,17 +232,14 @@ for g=2:1:g_max
     % 3. Cross-Over
     %-------------------
     
-    %Cross-Over Algorithmus:  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    %Children = cro_fun(Children);
+    [Children_coded] = CrossOver(Population_coded, fun_cro, cro_w);
     
     %-------------------
     % 4. Mutation
     %-------------------
     
-    %Mutation Algorithmus:  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    %Children = mut_fun(Children);
-    
-    
+    [Children_coded] = Mutation(Children_coded, mut_w);                       
+       
     %-------------------
     % 5. Dekodierung
     %-------------------
@@ -255,10 +252,10 @@ for g=2:1:g_max
     %-------------------
     
     %Neue Fitnesswerte berechnen
-    Children(3,:) = fit(Children(1,:),Children(2,:));
+    Children_coded(3,:) = fit(Children_coded(1,:),Children_coded(2,:));
     
     %Erstellen einer neuen Generation aus alter und children Generation
-    Population = Rekombination(Population, Children, popsize,fun_rek,1,0);
+    Population = Rekombination(Population, Children_coded, popsize,fun_rek,1,0);
     
     %Beste Fitness suchen aus neuer Population 
     [bestVal,bestIdx] = min(Population(3,:));
