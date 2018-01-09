@@ -1,4 +1,4 @@
-function [gray_pop] = gray_coding(pop)
+function [gray_pop] = binary2gray(pop)
     popsize = length(pop(1,:));
     nbits = length(pop(1,1));
     for j = 1:2        
