@@ -12,7 +12,7 @@ if rand(1) <= mut_w
     %% Einstellungen
     
     %Wahrscheinlichkeit, dass ein Bit mutiert/invertiert wird
-    wkeit = 0.5;
+    wkeit = 0.3;
     
     %Anzahl der Chromosomen, die mutiert werden sollen
     n_mut = 2;

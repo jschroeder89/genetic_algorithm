@@ -18,13 +18,16 @@ g_max = 1000;
 dopt = 1e-2;
 
 %Cross-Over und Mutationswahrscheinlichkeit 
-cro_w = 0.4;
-mut_w = 0.5;
+cro_w = 0.6;
+mut_w = 0.1;
+
 
 %----Parameter für Testumgebung-------
 %Testdurchläufe pro Einstellparameter 
 Max_It = 1;
 
+%Mat-File Name, in welchem die Testergebnisse gespeichert werden
+filename_result = 'Testergebnisse.mat';
 
 %%------------------------------------------------------------------------
 %% Funktionshandler und Methodenstrings anlegen
@@ -243,7 +246,7 @@ for s=1:1:numfun_s
 end
 
 %Ergebnisse auf Festplatte speichern
-save('Testergebnisse.mat','acc_storage','it_storage','popsize','cro_w','mut_w');
+save(filename_result,'acc_storage','it_storage','popsize','cro_w','mut_w');
     
 
 
