@@ -1,4 +1,4 @@
-function [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, fit, xmin, xmax, ymin, ymax, popsize, fun_sel, fun_cro, fun_rek, cro_w, mut_w, opt, dopt)
+function [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, fit, xmin, xmax, ymin, ymax, popsize, fun_sel, fun_cro, fun_mut, fun_rek, cro_w, mut_w, opt, dopt)
 
 % Aufruf:    [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, fit, xmin, xmax, ymin, ymax, popsize, fun_sep, fun_cro, fun_mut, fun_rek, cro_w, mut_w, opt, dopt);
 % g_max:     maximale Anzahl Iterationen/Generationen Default: 1000
@@ -10,6 +10,7 @@ function [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, fit, xmin, xm
 % popsize:   Größe der Anfangspopulation Default: 10
 % fun_sel:   Selektionsalgortihmus Default: 
 % fun_cro:   Cross-Over Algorithmus Default: 'n_point_crossover'
+% fun_mut:   Mutations Algorithmus Default: 'two_wk'
 % fun_rek:   Rekombinations Algorithmus Default: 'elite' 
 % cro_w:     Cross-Over Wahrscheinlichkeit Default: 1
 % mut_w:     Mutationswahrscheinlichekit Default: 1
@@ -41,7 +42,7 @@ GIF = false;
 %% Default Werte festlegen
 %%------------------------------------------------------------------------
 
-if ~exist('t_max','var') g_max = 1000; end
+if ~exist('g_max','var') g_max = 1000; end
 if ~exist('fit','var') fit = @fRosenbrock; end
 if ~exist('xmin','var') xmin = -3; end
 if ~exist('xmax','var') xmax = 3; end
@@ -50,8 +51,9 @@ if ~exist('ymax','var') ymax = 3; end
 if ~exist('popsize','var') popsize = 10; end
 if ~exist('fun_sel','var') fun_sel = 'rang'; end
 if ~exist('fun_cro','var') fun_cro = 'n_point_crossover'; end
+if ~exist('fun_mut','var') fun_mut = 'two_wk'; end
 if ~exist('fun_rek','var') fun_rek = 'elite'; end
-if ~exist('cro_w','var') cro_w = 0.3; end
+if ~exist('cro_w','var') cro_w = 0.6; end
 if ~exist('mut_w','var') mut_w = 0.1; end
 if ~exist('opt','var') opt = [1;,1; 0]; end
 if ~exist('dopt','var') dopt = 1e-5; end
@@ -247,7 +249,7 @@ for g=2:1:g_max
     % 4. Mutation
     %-------------------
     
-    [Children_coded] = Mutation(Children_coded, mut_w);                       
+    [Children_coded] = Mutation(Children_coded, fun_mut, mut_w);                       
        
     %-------------------
     % 5. Dekodierung

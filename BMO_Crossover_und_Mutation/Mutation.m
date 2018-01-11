@@ -1,18 +1,32 @@
-function [Population_new] = Mutation(Population_old, mut_w)
+function [Population_new] = Mutation(Population_old, mut_w, Methode)
 
 %% Default-Werte
 
 if ~exist('cro_w','var') mut_w = 1; end
+if ~exist('methode','var') Methode = 'two_wk'; end
 
+%% Je nach Methode die Wahrscheinlichkeiten setzen
 
+if strcmp(Methode,'two_wk') 
+    
+    %Wahrscheinlichkeit, dass ein Bit mutiert/invertiert wird
+    wkeit = 0.3;
+    
+elseif strcmp(Methode,'one_wk') 
+    
+    %Wahrscheinlichkeit, dass ein Bit mutiert/invertiert wird
+    wkeit = mut_w;
+    %Wahrscheinlichkeit, dass überhaupt bei dieser Generation mutiert wird
+    mut_w = 1;
+    
+end
+    
 %% Mutation Durchführung
 
 if rand(1) <= mut_w
 
     %% Einstellungen
     
-    %Wahrscheinlichkeit, dass ein Bit mutiert/invertiert wird
-    wkeit = 0.3;
     
     %Anzahl der Chromosomen, die mutiert werden sollen
     n_mut = 2;
