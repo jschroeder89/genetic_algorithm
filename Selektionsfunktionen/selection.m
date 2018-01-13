@@ -1,8 +1,7 @@
 function sel = selection(sel_function, n, pop)
-    switch sel_function
-    case 'rank_base'
+    if strcmp(sel_function, 'rank_base')
         sel = rank_base(pop);
-    case 'elite'
+    elseif strcmp(sel_function, 'elite')
         sel = elite_sel(n, pop);
     end
 end

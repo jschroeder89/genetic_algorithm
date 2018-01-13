@@ -12,7 +12,7 @@ clc;
 popsize = 10;
 
 %Max Iterationen/Generationen pro Ducrhlauf des genetischen Algorithmus
-g_max = 3;
+g_max = 1000;
 
 %Abbruchbedingung: Mindestgenauigkeit der Lösungen
 dopt = 1e-2;
