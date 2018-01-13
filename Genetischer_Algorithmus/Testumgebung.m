@@ -46,7 +46,7 @@ fun_cod = 0;
 fun_dec = 0;
 
 %Methoden-Strings für Selektions Funktion als cell array anlegen
-fun_sel = {'keine'};
+fun_sel = {'rank_base','elite'};
 numfun_s = length(fun_sel);
 
 %Methoden-Strings für Cross_Over Funktion als cell array anlegen

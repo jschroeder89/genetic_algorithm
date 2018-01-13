@@ -29,7 +29,7 @@ function [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, fit, xmin, xm
 %%------------------------------------------------------------------------
 
 %Ausgabe von Plots ein/ausschalten
-PLOT = false;
+PLOT = true;
 
 %Abbruchbediengung ein/ausschalten
 BREAK = true;
@@ -49,7 +49,7 @@ if ~exist('xmax','var') xmax = 3; end
 if ~exist('ymin','var') ymin = -3; end
 if ~exist('ymax','var') ymax = 3; end
 if ~exist('popsize','var') popsize = 10; end
-if ~exist('fun_sel','var') fun_sel = 'rang'; end
+if ~exist('fun_sel','var') fun_sel = 'rank_base'; end
 if ~exist('fun_cro','var') fun_cro = 'n_point_crossover'; end
 if ~exist('fun_mut','var') fun_mut = 'two_wk'; end
 if ~exist('fun_rek','var') fun_rek = 'elite'; end
@@ -211,13 +211,14 @@ Gen_Counter = 0;
 Best_Counter = g_max;
 
 %Anzahl der Ausgabeupdtaes pro Funktionsaufrauf
-update_steps = 10;
+update_steps = 100;
 
 %Children Population anlegen
 Children = zeros(3,popsize);
 
 
 for g=2:1:g_max
+    
     
     %-------------------
     % 1. Codierung der Generation
@@ -230,20 +231,14 @@ for g=2:1:g_max
     % 2. Selektion
     %-------------------
     
-    %Gesamtfitness berechnen aller Chromosome
-    tot_fit = sum(Population(3,:));
-    
-    %Später löschen/ersetzen:
-    %Children = Population;
-    
-    %Selektiosalgorithmus: Roulette !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    %Children = sel_fun(Population);
-    
+    Turnierteilnehmer = 0.2;
+    Children_coded = selection(fun_sel, Turnierteilnehmer, Population_coded);
+   
     %-------------------
     % 3. Cross-Over
     %-------------------
     
-    [Children_coded] = CrossOver(Population_coded, fun_cro, cro_w);
+    [Children_coded] = CrossOver(Children_coded, fun_cro, cro_w);
     
     %-------------------
     % 4. Mutation
