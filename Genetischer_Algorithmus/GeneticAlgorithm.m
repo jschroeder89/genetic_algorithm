@@ -29,7 +29,7 @@ function [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, fit, xmin, xm
 %%------------------------------------------------------------------------
 
 %Ausgabe von Plots ein/ausschalten
-PLOT = true;
+PLOT = false;
 
 %Abbruchbediengung ein/ausschalten
 BREAK = true;
@@ -49,7 +49,7 @@ if ~exist('xmax','var') xmax = 3; end
 if ~exist('ymin','var') ymin = -3; end
 if ~exist('ymax','var') ymax = 3; end
 if ~exist('popsize','var') popsize = 10; end
-if ~exist('fun_sel','var') fun_sel = 'rank_base'; end
+if ~exist('fun_sel','var') fun_sel = 'elite'; end
 if ~exist('fun_cro','var') fun_cro = 'n_point_crossover'; end
 if ~exist('fun_mut','var') fun_mut = 'two_wk'; end
 if ~exist('fun_rek','var') fun_rek = 'elite'; end
@@ -211,7 +211,7 @@ Gen_Counter = 0;
 Best_Counter = g_max;
 
 %Anzahl der Ausgabeupdtaes pro Funktionsaufrauf
-update_steps = 100;
+update_steps = 10;
 
 %Children Population anlegen
 Children = zeros(3,popsize);
@@ -231,8 +231,7 @@ for g=2:1:g_max
     % 2. Selektion
     %-------------------
     
-    Turnierteilnehmer = 0.2;
-    Population_coded
+    Turnierteilnehmer = 0.1;
     Children_coded = selection(fun_sel, Turnierteilnehmer, Population_coded);
    
     %-------------------

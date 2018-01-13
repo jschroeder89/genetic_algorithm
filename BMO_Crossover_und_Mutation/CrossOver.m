@@ -20,7 +20,7 @@ if rand(1) <= cro_w
     %% Chromosomen-Auswahl
     hamming = zeros(2,1);                                                   % Zum Start der Hammingfunktion wird auf 0 gesetzt
 
-    while norm(hamming - zeros(2,1)) < 0.00001                              % Hammingdistanz zwischen den Chromosomen muss größer 0 sein
+    %while norm(hamming - zeros(2,1)) < 0.00001                              % Hammingdistanz zwischen den Chromosomen muss größer 0 sein
 
         rand_num = unique(randi([1 size(Population_old,2)],1,2));
         while size(rand_num,2) ~= 2                                         % Vermeidung, dass ein Chromosomen doppelt ausgewählt wird
@@ -34,7 +34,7 @@ if rand(1) <= cro_w
 
         [ hamming ] = calc_hamming(tmp_Gen_coded);                          % Überprüfung der Hammingdistanz der ausgewählten Chromosomen
 
-    end
+    %end
 
 
     %% Cross-Over Algorithmus

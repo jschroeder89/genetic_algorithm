@@ -27,7 +27,7 @@ mut_w = 0.1;
 Max_It = 1;
 
 %Mat-File Name, in welchem die Testergebnisse gespeichert werden
-filename_result = 'Testergebnisse.mat';
+filename_result = 'Testergebnisse2.mat';
 
 %%------------------------------------------------------------------------
 %% Funktionshandler und Methodenstrings anlegen

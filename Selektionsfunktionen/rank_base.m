@@ -1,6 +1,6 @@
 function selected = rank_base(pop)
     popsize = length(pop(3,:));
-    dpop = str2double(pop(3,:))
+    dpop = str2double(pop(3,:));
     [fit_sorted original_pos] = sort(dpop, 'descend');    
     ranks(1,:) = [1:1:popsize];
     ranks(2,:) = original_pos;

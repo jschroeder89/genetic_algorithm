@@ -3,6 +3,6 @@ function sel = selection(sel_function, n, pop)
     case 'rank_base'
         sel = rank_base(pop);
     case 'elite'
-        sel = elite_sel(n, pop)
+        sel = elite_sel(n, pop);
     end
 end
