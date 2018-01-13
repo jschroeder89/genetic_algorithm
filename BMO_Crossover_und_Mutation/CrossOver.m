@@ -39,15 +39,14 @@ if rand(1) <= cro_w
 
     %% Cross-Over Algorithmus
 
-    switch(Methode)
-        case 'n_point_crossover'
-            [tmp_Gen_coded] = n_point_crossover(tmp_Gen_coded, n); 
-
-        case 'uniform_crossover'
-            [tmp_Gen_coded] = uniform_crossover(tmp_Gen_coded, wkeit);
-
-        case 'shuffle_crossover'
-            [tmp_Gen_coded] = shuffle_crossover(tmp_Gen_coded);
+    if strcmp(Methode,'n_point_crossover') 
+        [tmp_Gen_coded] = n_point_crossover(tmp_Gen_coded, n); 
+        
+    elseif strcmp(Methode,'uniform_crossover') 
+        [tmp_Gen_coded] = uniform_crossover(tmp_Gen_coded, wkeit);
+        
+    elseif strcmp(Methode,'shuffle_crossover') 
+        [tmp_Gen_coded] = shuffle_crossover(tmp_Gen_coded);
     end
 
     
@@ -59,6 +58,9 @@ if rand(1) <= cro_w
         Population_new{2,rand_num(i)} = tmp_Gen_coded{2,i};
     end
 
+    
+else
+    Population_new = Population_old;
 end
 
 end

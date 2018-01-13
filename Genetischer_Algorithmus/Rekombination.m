@@ -1,56 +1,46 @@
-function [Population_next] = Rekombination(Population_cur, Children, popsize, method, nelite, random)
+function [Population_next] = Rekombination(Population_cur, Children, Methode)
 
 % Aufruf:           [Population_new] = Rekombination(Population_old, Children, popsize, elite)
 % Population_cur:   Aktuellle Poulation
 % Children:         Veränderte Population (mit Selektion, Cross-Over,
-%                   Mutation)
-% popsize:          Größe der Anfangspopulation Default: 10
 % method:           String: 1)'no_elite' , 2) 'elite' Default: 'elite'
-% elite:            Anzahl der besten Individuen, welche aus der aktuellen
-%                   Population in die nächste übernommen weren sollen
-%                   Default:1
-% random:           [0,1] zufällige Auswahl aus der Children Generation für
-%                   die nächste Generation ein/ausschalten. Default: 0
 %
 % [Population_next]: Neue Generation
     
-if ~exist('popsize','var') popsize = 10; end
-if ~exist('method','var') method = 'elite'; end
-if ~exist('elite','var') nelite = 1; end
-if ~exist('random','var') random = 0; end
+if ~exist('method','var') Methode = 'elite'; end
 
-if strcmp(method,'no_elite') == 0 && strcmp(method,'elite') == 0
-   method = 'no_elite'; 
+
+if strcmp(Methode,'no_elite') == 0 && strcmp(Methode,'elite') == 0
+   Methode = 'no_elite'; 
 end
     
-    if strcmp(method,'elite') 
+    %Alte Population komplett mit Childern Generation überschreiben
+    Population_next = Children;
+    
+    if strcmp(Methode,'elite') 
         
-        %Sortiere aktuelle Generation nach Größe der letzten Zeile (Fitnesswerte) von klein nach
-        %groß
-        [~,idx] = sort(Population_cur(3,:)); 
-        Population_cur = Population_cur(:,idx);   
-
-        %Die Chromosomen mit bester Fitness aufjedenfall übernehmen in die
-        %nächste Population
-        Population_next = Population_cur(:,1:nelite);
-
-        %Restlichen Chromosomen aus Veränderter Population (Children) wählen
-        %Methode1: Zufällig aus Children Individuen
-        %Methode2: besten der Children Individuen
-        if random == 1
-            random_vek = rand(1,popsize);
-            [~,idx] = sort(random_vek(:),'descend'); 
-            Children = Children(:,idx);
-        else
+        %Population aus P und P* (Children und Adult) zusammenfügen und
+        %kleinsten Wert ermitteln --> Wird aufjedenfall in die neue Generation
+        %übernommen
+        Rek_Pop = horzcat(Children,Population_cur);
+        [~,minidx] = min(Rek_Pop(3,:));
+        
+        %Children Generation nur überschreiben, wenn in Adult Generation das
+        %momentane Minimum liegt bzw. bester Fitnesswert  
+        if minidx > size(Children,2)
+            %Besten Wert in neue Generation übernehmen
+            Population_next(:,1) = Rek_Pop(:,minidx);
+            %Children Generation nach Fitnesswert sortieren
             [~,idx] = sort(Children(3,:)); 
             Children = Children(:,idx);  
+            %besten popsize-1 Chromosome der Children Generation in neue
+            %Generation stecken
+            Population_next(:,2:size(Children,2)) = Children(:,1:size(Children,2)-1);
         end
-        Population_next = horzcat(Population_next, Children(:,1:popsize-nelite));  
     
-    elseif strcmp(method,'no_elite')
+    elseif strcmp(Methode,'no_elite')
         
-        %Alte Population komplett mit Childern Generation überschreiben
-        Population_next = Children;
+        return;
         
     end
 end

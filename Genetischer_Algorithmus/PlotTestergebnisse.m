@@ -27,7 +27,7 @@ colors = hsv(KombiNum);
 
 %% Plotten 
 cd(DirName)
-for fun=1:1
+for fun=1:FitnessNum
     
     %-------------------
     %Neues Fenster für Funktion erstellen
@@ -41,7 +41,7 @@ for fun=1:1
     subplot(2,1,1);
     for i=2:KombiNum+1
         %Kehrwert der Genauigkeit --> höchster Wert am besten
-        acc = 1/cell2mat(acc_storage(i,fun+1));
+        acc = cell2mat(acc_storage(i,fun+1));
         %Plotten in Balkendiagramm
         h = bar(i-1,acc,'facecolor', colors(i-1,:),'BarWidth',0.5);
         legend_str(i-1) = acc_storage{i,1};
@@ -49,8 +49,9 @@ for fun=1:1
     end
     legend(legend_str{:},'Location','bestoutside');
     xlabel('Methodenkombinationen');
-    ylabel('Genauigekit^{-1}');
+    ylabel('Genauigekit - Abweichung vom Optimum');
     title(strcat(figure_str,title_str));
+    grid minor;
 
     %------------------- 
     %Iterationen plotten
@@ -67,6 +68,7 @@ for fun=1:1
     legend(legend_str{:},'Location','bestoutside');
     xlabel('Methodenkombinationen');
     ylabel('Anzahl an Iterationen');
+    grid minor;
     
     saveas(fig,strcat(char(acc_storage(1,fun+1)),'.fig'))
 

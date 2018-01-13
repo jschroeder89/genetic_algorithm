@@ -18,9 +18,10 @@ grid minor;
 axis square;
 
 %% Shekels Fuchsbauten
-xShekels = linspace(-40,40,200);
-yShekels = linspace(-40,40,200);
+xShekels = linspace(-65,65,200);
+yShekels = linspace(-65,65,200);
 [XShekels,YShekels] = meshgrid(xShekels,yShekels);
+%ZShekels = fShekelsFuchsbauten(XShekels,YShekels);
 ZShekels = fShekelsFuchsbauten(XShekels,YShekels);
 
 subplot(3,3,2);

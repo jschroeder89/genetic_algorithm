@@ -1,4 +1,4 @@
-function [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, fit, xmin, xmax, ymin, ymax, popsize, fun_sel, fun_cro, fun_mut, fun_rek, cro_w, mut_w, opt, dopt);
+function [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, fit, xmin, xmax, ymin, ymax, popsize, fun_sel, fun_cro, fun_mut, fun_rek, cro_w, mut_w, opt, dopt)
 
 % Aufruf:    [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, fit, xmin, xmax, ymin, ymax, popsize, fun_sep, fun_cro, fun_mut, fun_rek, cro_w, mut_w, opt, dopt);
 % g_max:     maximale Anzahl Iterationen/Generationen Default: 1000
@@ -10,7 +10,7 @@ function [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, fit, xmin, xm
 % popsize:   Größe der Anfangspopulation Default: 10
 % fun_sel:   Selektionsalgortihmus Default: 
 % fun_cro:   Cross-Over Algorithmus Default: 'n_point_crossover'
-% fun_mut:   Mutations Algorithmus Default: 
+% fun_mut:   Mutations Algorithmus Default: 'two_wk'
 % fun_rek:   Rekombinations Algorithmus Default: 'elite' 
 % cro_w:     Cross-Over Wahrscheinlichkeit Default: 1
 % mut_w:     Mutationswahrscheinlichekit Default: 1
@@ -32,7 +32,7 @@ function [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, fit, xmin, xm
 PLOT = false;
 
 %Abbruchbediengung ein/ausschalten
-BREAK = false;
+BREAK = true;
 
 %GIF Erstellen ein/ausschalten
 GIF = false;
@@ -42,19 +42,19 @@ GIF = false;
 %% Default Werte festlegen
 %%------------------------------------------------------------------------
 
-if ~exist('t_max','var') g_max = 1000; end
+if ~exist('g_max','var') g_max = 1000; end
 if ~exist('fit','var') fit = @fRosenbrock; end
 if ~exist('xmin','var') xmin = -3; end
 if ~exist('xmax','var') xmax = 3; end
 if ~exist('ymin','var') ymin = -3; end
 if ~exist('ymax','var') ymax = 3; end
 if ~exist('popsize','var') popsize = 10; end
-if ~exist('fun_sel','var') fun_sel = 'abc'; end
+if ~exist('fun_sel','var') fun_sel = 'rang'; end
 if ~exist('fun_cro','var') fun_cro = 'n_point_crossover'; end
-if ~exist('fun_mut','var') fun_mut = 'abc'; end
+if ~exist('fun_mut','var') fun_mut = 'two_wk'; end
 if ~exist('fun_rek','var') fun_rek = 'elite'; end
-if ~exist('cro_w','var') cro_w = 1; end
-if ~exist('mut_w','var') mut_w = 1; end
+if ~exist('cro_w','var') cro_w = 0.6; end
+if ~exist('mut_w','var') mut_w = 0.1; end
 if ~exist('opt','var') opt = [1;,1; 0]; end
 if ~exist('dopt','var') dopt = 1e-5; end
 
@@ -158,6 +158,23 @@ end
          
 
 if PLOT == true
+    
+    %optimales globales Minimum plotten
+    subplot(1,2,1);
+    hold on;
+    plot3(opt(1),opt(2),opt(3),'wo','MarkerSize',6,'MarkerFaceColor','w');
+    subplot(1,2,2);
+    hold on;
+    plot(opt(1),opt(2),'wo','MarkerSize',6,'MarkerFaceColor','w');
+    
+    %Beste Fitness plotten
+    subplot(1,2,1);
+    hold on;
+    plot3(best(1),best(2),best(3),'r+','MarkerSize',20);
+    subplot(1,2,2);
+    hold on;
+    plot(best(1),best(2),'r+','MarkerSize',20);
+    
     %Anfangspopulation plotten
     subplot(1,2,1);
     hold on;
@@ -167,13 +184,6 @@ if PLOT == true
     hold on;
     plot(Population(1,:),Population(2,:),'k+','MarkerSize',8);
 
-    %Beste Fitness plotten
-    subplot(1,2,1);
-    hold on;
-    plot3(best(1),best(2),best(3),'r+','MarkerSize',20);
-    subplot(1,2,2);
-    hold on;
-    plot(best(1),best(2),'r+','MarkerSize',20);
     
     %GIF erstellen
     if GIF == true
@@ -194,7 +204,7 @@ end
 
 %Abbruchbedingung: Bei wievielen Generationswechseln ohne Verbesserung der
 %Fitness
-Max_Gen = 50;
+Max_Gen = g_max;
 %Zähler für Generationen ohne Fitnessverbesserung
 Gen_Counter = 0;
 %Merker für Anzahl der Generationen bis gute Näherung erreicht wird 
@@ -214,6 +224,7 @@ for g=2:1:g_max
     %-------------------
     
     [Population_coded] = binary_coding(Population, xmax, xmin, ymax, ymin);
+    [Population_coded] = binary2gray(Population_coded);
     
     %-------------------
     % 2. Selektion
@@ -238,13 +249,32 @@ for g=2:1:g_max
     % 4. Mutation
     %-------------------
     
-    [Children_coded] = Mutation(Children_coded, mut_w);                       
+    [Children_coded] = Mutation(Children_coded, fun_mut, mut_w);                       
        
     %-------------------
     % 5. Dekodierung
     %-------------------
     
+    [Children_coded] = gray2binary(Children_coded);
+    [Children] = binary_decoding(Children_coded, xmax, xmin, ymax, ymin);
     
+    %Punkte innerhalb des Suchraums setzen (falls durch CrossOver etc
+    %außerhalb)
+    for i = 1:size(Children,2)
+    
+        if Children(1,i) > xmax
+            Children(1,i) = xmax;
+        elseif Children(1,i) < xmin
+            Children(1,i) = xmin;
+        end
+        
+        if Children(2,i) > ymax
+            Children(2,i) = ymax;
+        elseif Children(2,i) < ymin
+            Children(2,i) = ymin;
+        end
+        
+    end
     
     %-------------------
     % 6. Neue Fitnesswerte berechnen &
@@ -252,10 +282,10 @@ for g=2:1:g_max
     %-------------------
     
     %Neue Fitnesswerte berechnen
-    Children_coded(3,:) = fit(Children_coded(1,:),Children_coded(2,:));
+    Children(3,:) = fit(Children(1,:),Children(2,:));
     
     %Erstellen einer neuen Generation aus alter und children Generation
-    Population = Rekombination(Population, Children_coded, popsize,fun_rek,1,0);
+    Population = Rekombination(Population, Children, fun_rek);
     
     %Beste Fitness suchen aus neuer Population 
     [bestVal,bestIdx] = min(Population(3,:));
@@ -264,9 +294,9 @@ for g=2:1:g_max
         Best_Counter = g;
         Gen_Counter = 0;
     else
-        Gen_Counter = Gen_Counter + 1;
+        Gen_Counter = Gen_Counter+1;
     end
-    
+    Best_Counter = g;
  
     %-------------------
     % Ausgaben/Plots
@@ -283,11 +313,13 @@ for g=2:1:g_max
             title('Funktionsplot');
             grid minor;
             hold on;
-            plot3(Population(1,:),Population(2,:),Population(3,:),'k+','MarkerSize',8);
+            plot3(opt(1),opt(2),opt(3),'wo','MarkerSize',6,'MarkerFaceColor','w');
             hold on;
             plot3(best(1),best(2),best(3),'r+','MarkerSize',20);
+            hold on;
+            plot3(Population(1,:),Population(2,:),Population(3,:),'k+','MarkerSize',8);
             hold off;
-
+            
 
             %Höhenlinien plotten mit neuer Generation
             subplot(1,2,2);
@@ -298,9 +330,11 @@ for g=2:1:g_max
             title('Höhenlinien');
             grid minor;
             hold on;
-            plot(Population(1,:),Population(2,:),'k+','MarkerSize',8);
+            plot(opt(1),opt(2),'wo','MarkerSize',6,'MarkerFaceColor','w');
             hold on
             plot(best(1),best(2),'r+','MarkerSize',20);
+            hold on;
+            plot(Population(1,:),Population(2,:),'k+','MarkerSize',8);
             hold off
             
             %GIF erstellen
@@ -333,3 +367,4 @@ end
 
 % Ausgabe des bisher besten Punkts
 loesung = best(:);
+
