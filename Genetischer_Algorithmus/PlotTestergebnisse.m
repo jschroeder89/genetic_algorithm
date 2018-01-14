@@ -10,7 +10,7 @@ mkdir(DirName);
 
 
 %Testergebnisse aus mat-datei laden
-load('Testergebnisse.mat');
+load('Testergebnisse2.mat');
 
 %Anzahl an Fitnessfunktionen und Kombinationen der Methoden
 [KombiNum,FitnessNum] = size(acc_storage);
@@ -38,7 +38,7 @@ for fun=1:FitnessNum
     %-------------------
     %Genauigkeit plotten
     %-------------------
-    subplot(2,1,1);
+    sub1 = subplot(2,1,1);
     for i=2:KombiNum+1
         %Kehrwert der Genauigkeit --> höchster Wert am besten
         acc = cell2mat(acc_storage(i,fun+1));
@@ -47,7 +47,9 @@ for fun=1:FitnessNum
         legend_str(i-1) = acc_storage{i,1};
         hold on;
     end
-    legend(legend_str{:},'Location','bestoutside');
+    l = legend(legend_str{:},'Location','bestoutside');
+    l.FontSize = 6;
+    set(l,'Interpreter','none')
     xlabel('Methodenkombinationen');
     ylabel('Genauigekit - Abweichung vom Optimum');
     title(strcat(figure_str,title_str));
@@ -65,7 +67,7 @@ for fun=1:FitnessNum
         legend_str(i-1) = it_storage{i,1};
         hold on;
     end
-    legend(legend_str{:},'Location','bestoutside');
+    %legend(legend_str{:},'Location','bestoutside');
     xlabel('Methodenkombinationen');
     ylabel('Anzahl an Iterationen');
     grid minor;
@@ -74,3 +76,4 @@ for fun=1:FitnessNum
 
         
 end
+cd ..
