@@ -7,6 +7,11 @@ clc;
 %% Parameter
 %%------------------------------------------------------------------------
 
+% Parallel Computing on
+%delete(gcp('nocreate'));
+%pool = parpool('local');
+
+%tic;
 %----Parameter für genetischen Algorithmus-------
 %Startpopulation
 popsize = 10;
@@ -15,7 +20,7 @@ popsize = 10;
 g_max = 1000;
 
 %Abbruchbedingung: Mindestgenauigkeit der Lösungen
-dopt = 1e-2;
+dopt = 1e-3;
 
 %Cross-Over und Mutationswahrscheinlichkeit 
 cro_w = 0.6;
@@ -27,7 +32,7 @@ mut_w = 0.1;
 Max_It = 1;
 
 %Mat-File Name, in welchem die Testergebnisse gespeichert werden
-filename_result = 'Testergebnisse2.mat';
+filename_result = 'Testergebnisse3.mat';
 
 %%------------------------------------------------------------------------
 %% Funktionshandler und Methodenstrings anlegen
@@ -46,7 +51,7 @@ fun_cod = 0;
 fun_dec = 0;
 
 %Methoden-Strings für Selektions Funktion als cell array anlegen
-fun_sel = {'rank_base','elite'};
+fun_sel = {'rank_base','elite','prop_selection'};
 numfun_s = length(fun_sel);
 
 %Methoden-Strings für Cross_Over Funktion als cell array anlegen
@@ -255,6 +260,9 @@ end
 %Ergebnisse auf Festplatte speichern
 save(filename_result,'acc_storage','it_storage','popsize','cro_w','mut_w');
     
+%Threads schließen
+%delete(gcp('nocreate'));
+%toc;
 
 
 

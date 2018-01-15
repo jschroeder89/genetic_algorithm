@@ -5,8 +5,9 @@ clc
 %% Einstellungen
 
 %Ordner für Testergebnisse erstellen
-DirName = ['Test01'];
+DirName = ['Test03'];
 mkdir(DirName);
+copyfile action2.m Test03;
 
 
 %Testergebnisse aus mat-datei laden
@@ -49,6 +50,9 @@ for fun=1:FitnessNum
     end
     l = legend(legend_str{:},'Location','bestoutside');
     l.FontSize = 6;
+    %cd ..
+    l.ItemHitFcn = @action2;
+    %cd(DirName)
     set(l,'Interpreter','none')
     xlabel('Methodenkombinationen');
     ylabel('Genauigekit - Abweichung vom Optimum');
