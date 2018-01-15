@@ -1,11 +1,11 @@
-function gittersize = get_gittersize(Sx)
+function gitsize = get_gitsize(Sx)
 
 if Sx <= 10
-    gittersize = 1e5;
+    gitsize = 1e5;
 elseif Sx <= 100
-    gittersize = 1e6;
+    gitsize = 1e6;
 elseif Sx > 100
-    gittersize = 1e7;
+    gitsize = 1e7;
 end
 
 end
