@@ -351,6 +351,12 @@ for g=2:1:g_max
     %Euklidischer Abstand zwischen optimaler Lï¿½sung und gefundener Lï¿½sung
     accuracy = sqrt((opt(1)-best(1))^2 + (opt(2)-best(2))^2);
     
+    %Bei sehr geringer Fitnessabweichung Abweichung-->0 (benötigt für
+    %diskrete Funktionen)
+    if abs(opt(3)-best(3)) <= 1e-5
+       accuracy = 0; 
+    end
+    
     %Abstand der Fitness
     %accuracy = abs(opt(3)-best(3));
     
