@@ -4,14 +4,15 @@ function [sel pos] = roulette(fitness)
     val = fitness(1);
     pos = 1;
     for i = 2:length(fitness)
-        if r <= val
+        if r < val
             sel = fitness(i-1);
             pos = i-1;
             break;
+        else
+            val = fitness(i) + val;
         end
-        val = fitness(i-1) + fitness(i);
-        if r >= val
-            sel = fitness(i);  
+        if val == 1
+            sel = fitness(length(fitness));
             pos = i;
         end
     end

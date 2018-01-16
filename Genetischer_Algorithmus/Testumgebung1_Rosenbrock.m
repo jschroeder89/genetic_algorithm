@@ -12,14 +12,14 @@ delete(gcp('nocreate'));
 pool = parpool('local');
 
 tic;
-%----Parameter für genetischen Algorithmus-------
+%----Parameter fï¿½r genetischen Algorithmus-------
 %Startpopulation
 popsize = 10;
 
 %Max Iterationen/Generationen pro Ducrhlauf des genetischen Algorithmus
 g_max = 1000;
 
-%Abbruchbedingung: Mindestgenauigkeit der Lösungen
+%Abbruchbedingung: Mindestgenauigkeit der Lï¿½sungen
 dopt = 1e-2;
 
 %Cross-Over und Mutationswahrscheinlichkeit 
@@ -27,8 +27,8 @@ cro_w = 0.6;
 mut_w = 0.1;
 
 
-%----Parameter für Testumgebung-------
-%Testdurchläufe pro Einstellparameter 
+%----Parameter fï¿½r Testumgebung-------
+%Testdurchlï¿½ufe pro Einstellparameter 
 Max_It = 10;
 
 %Mat-File Name, in welchem die Testergebnisse gespeichert werden
@@ -44,25 +44,25 @@ addpath('Fitnessfunktionen');
 %Fitnessfunktionen 
 fun_fit = {'fRosenbrock'};
 
-%Funktions Handler für Codierungs Funktion anlegen
+%Funktions Handler fï¿½r Codierungs Funktion anlegen
 fun_cod = 0;
 
-%Funktions Handler für Dekodierungs Funktion anlegen
+%Funktions Handler fï¿½r Dekodierungs Funktion anlegen
 fun_dec = 0;
 
-%Methoden-Strings für Selektions Funktion als cell array anlegen
+%Methoden-Strings fï¿½r Selektions Funktion als cell array anlegen
 fun_sel = {'rank_base','elite','prop_selection'};
 numfun_s = length(fun_sel);
 
-%Methoden-Strings für Cross_Over Funktion als cell array anlegen
+%Methoden-Strings fï¿½r Cross_Over Funktion als cell array anlegen
 fun_cro = {'n_point_crossover','uniform_crossover','shuffle_crossover'};
 numfun_cr = length(fun_cro);
 
-%Methoden-Strings für Mutation Funktion als cell array anlegen
+%Methoden-Strings fï¿½r Mutation Funktion als cell array anlegen
 fun_mut = {'one_wk','two_wk'};
 numfun_m = length(fun_mut);
 
-%Funktions Handler für Rekombinations Funktion als cell array anlegen
+%Funktions Handler fï¿½r Rekombinations Funktion als cell array anlegen
 fun_rek = {'no_elite','elite'};
 numfun_r = length(fun_rek);
 
@@ -70,17 +70,17 @@ n_methoden = numfun_s*numfun_cr*numfun_m*numfun_r;
 
 
 %%------------------------------------------------------------------------
-%% Speicher für Testergebnisse
+%% Speicher fï¿½r Testergebnisse
 %%------------------------------------------------------------------------
 
-%Speicher für Ergebnisse aller kombinierten Methoden für die Genauigkeit
+%Speicher fï¿½r Ergebnisse aller kombinierten Methoden fï¿½r die Genauigkeit
 %Zeilen: Methodenzusammensetzung
 %Spalten: Funktionen
 acc_storage = [{'Methoden-Kombination'}, fun_fit];
 [Zeilen_acc,Spalten_acc] = size(acc_storage);
 
 
-%Speicher für Ergebnisse aller kombinierten Methoden für die durchlaufenen
+%Speicher fï¿½r Ergebnisse aller kombinierten Methoden fï¿½r die durchlaufenen
 %Iterationen
 %Zeilen: Methodenzusammensetzung
 %Spalten: Funktionen
@@ -90,18 +90,18 @@ it_storage = [{'Methoden-Kombination'}, fun_fit];
 
 
 %%------------------------------------------------------------------------
-%% Testdurchläufe
+%% Testdurchlï¿½ufe
 %%------------------------------------------------------------------------
-%Index für die Anzahl der Methoden-Kombinationen
+%Index fï¿½r die Anzahl der Methoden-Kombinationen
 idx = 1;
 
-%Schleife für Selektion
+%Schleife fï¿½r Selektion
 for s=1:1:numfun_s
-    %Schleife für Cross-Over
+    %Schleife fï¿½r Cross-Over
     for c=1:1:numfun_cr
-        %Schleife für Mutation
+        %Schleife fï¿½r Mutation
         for m=1:1:numfun_m
-            %Schleife für Rekombination          
+            %Schleife fï¿½r Rekombination          
             for r=1:1:numfun_r
 
                 %Methode anlegen in Speicher
@@ -116,9 +116,9 @@ for s=1:1:numfun_s
                 it_sum = zeros(1,Spalten_it-1);
 
 
-                 %Schleife für mehrere Testreihen mit gleicher
+                 %Schleife fï¿½r mehrere Testreihen mit gleicher
                  %Funktionsmethoden
-                 for i=1:1:Max_It
+                 parfor i=1:1:Max_It
 
 
                     %-------------------
@@ -129,12 +129,12 @@ for s=1:1:numfun_s
 
                     [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, @fRosenbrock, xmin, xmax, ymin, ymax, popsize, fun_sel(s), fun_cro(c), fun_mut(m), fun_rek(r), cro_w, mut_w, opt, dopt);
 
-                    acc_sum(1) = acc_sum(1) + accuracy;
-                    it_sum(1) = it_sum(1) + Best_Counter;
+                    %acc_sum(1) = acc_sum(1) + accuracy;
+                    %it_sum(1) = it_sum(1) + Best_Counter;
 
-                    fprintf('\n1. Rosenbrock done mit Lösung - Optimal:\n');
-                    disp(horzcat(loesung,opt'));
-                    fprintf('It: %d \t acc: %f\n',Best_Counter,accuracy);
+                    %fprintf('\n1. Rosenbrock done mit Lï¿½sung - Optimal:\n');
+                    %disp(horzcat(loesung,opt'));
+                    %fprintf('It: %d \t acc: %f\n',Best_Counter,accuracy);
 
                  end
 
@@ -154,7 +154,7 @@ toc;
 %Ergebnisse auf Festplatte speichern
 save(filename_result,'acc_storage','it_storage','popsize','cro_w','mut_w');
     
-%Threads schließen
+%Threads schlieï¿½en
 delete(gcp('nocreate'));
 
 
