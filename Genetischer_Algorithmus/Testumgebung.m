@@ -11,7 +11,7 @@ clc;
 %delete(gcp('nocreate'));
 %pool = parpool('local');
 
-%tic;
+tic;
 %----Parameter für genetischen Algorithmus-------
 %Startpopulation
 popsize = 10;
@@ -256,13 +256,13 @@ for s=1:1:numfun_s
         end
     end
 end
-
+toc;
 %Ergebnisse auf Festplatte speichern
 save(filename_result,'acc_storage','it_storage','popsize','cro_w','mut_w');
     
 %Threads schließen
 %delete(gcp('nocreate'));
-%toc;
+
 
 
 

@@ -15,7 +15,7 @@ if strcmp(Methode,'two_wk')
 elseif strcmp(Methode,'one_wk') 
     
     %Wahrscheinlichkeit, dass ein Bit mutiert/invertiert wird
-    wkeit = mut_w;
+    wkeit = mut_w/5;
     %Wahrscheinlichkeit, dass überhaupt bei dieser Generation mutiert wird
     mut_w = 1;
     

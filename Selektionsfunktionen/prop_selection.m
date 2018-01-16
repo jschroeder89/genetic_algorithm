@@ -4,7 +4,6 @@ function seleceted = prop_selection(pop)
     norm_fitness = norm_fit(dpop);
     for i = 1:popsize
         [sel pos] = roulette(norm_fitness);
-        sel, pos
         seleceted(1:3, i) = pop(1:3, pos);
     end
 end
