@@ -27,7 +27,8 @@ colors = hsv(KombiNum);
 
 
 %% Plotten 
-cd(DirName)
+cd(DirName);
+
 for fun=1:FitnessNum
     
     %-------------------
@@ -48,21 +49,21 @@ for fun=1:FitnessNum
         legend_str(i-1) = acc_storage{i,1};
         hold on;
     end
-    l = legend(legend_str{:},'Location','bestoutside');
-    l.FontSize = 6;
-    %cd ..
-    l.ItemHitFcn = @action2;
-    %cd(DirName)
-    set(l,'Interpreter','none')
     xlabel('Methodenkombinationen');
     ylabel('Genauigekit - Abweichung vom Optimum');
     title(strcat(figure_str,title_str));
     grid minor;
+    
+    subplot(2,1,1);
+    l = legend(legend_str{:},'Location','bestoutside');
+    l.FontSize = 8;
+    l.ItemHitFcn = @action2;
+    set(l,'Interpreter','none')
 
     %------------------- 
     %Iterationen plotten
     %-------------------
-    subplot(2,1,2);
+    sub2 = subplot(2,1,2);
     for i=2:KombiNum+1
         %Kehrwert der Genauigkeit --> höchster Wert am besten
         it = cell2mat(it_storage(i,fun+1));
@@ -75,6 +76,13 @@ for fun=1:FitnessNum
     xlabel('Methodenkombinationen');
     ylabel('Anzahl an Iterationen');
     grid minor;
+    
+    pos2 = get(sub2, 'Position');
+    pos2(3) = pos2(3)*0.615;
+    
+    set(sub2, 'Position',pos2)
+    
+
     
     saveas(fig,strcat(char(acc_storage(1,fun+1)),'.fig'))
 

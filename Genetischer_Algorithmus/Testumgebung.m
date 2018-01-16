@@ -20,7 +20,7 @@ popsize = 10;
 g_max = 1000;
 
 %Abbruchbedingung: Mindestgenauigkeit der Lösungen
-dopt = 1e-3;
+dopt = 1e-2;
 
 %Cross-Over und Mutationswahrscheinlichkeit 
 cro_w = 0.6;
@@ -29,7 +29,7 @@ mut_w = 0.1;
 
 %----Parameter für Testumgebung-------
 %Testdurchläufe pro Einstellparameter 
-Max_It = 1;
+Max_It = 10;
 
 %Mat-File Name, in welchem die Testergebnisse gespeichert werden
 filename_result = 'Testergebnisse3.mat';
@@ -146,7 +146,7 @@ for s=1:1:numfun_s
                     [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, @fSchwefel, xmin, xmax, ymin, ymax, popsize, fun_sel(s), fun_cro(c), fun_mut(m), fun_rek(r), cro_w, mut_w, opt, dopt);
 
                     acc_sum(2) = acc_sum(2) + accuracy;
-                    it_sum(2) = it_sum(3) + Best_Counter;
+                    it_sum(2) = it_sum(2) + Best_Counter;
 
                     fprintf('\n2. Schwefels Funktion done mit Lösung - Optimal:\n');
                     disp(horzcat(loesung,opt'));

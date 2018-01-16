@@ -349,7 +349,7 @@ for g=2:1:g_max
     %-------------------
     
     %Euklidischer Abstand zwischen optimaler L�sung und gefundener L�sung
-    accuracy = sqrt((opt(1)-best(1))^2 + (opt(2)-best(2))^2 + (opt(3)-best(3))^2);
+    accuracy = sqrt((opt(1)-best(1))^2 + (opt(2)-best(2))^2);
     
     %Abstand der Fitness
     %accuracy = abs(opt(3)-best(3));
