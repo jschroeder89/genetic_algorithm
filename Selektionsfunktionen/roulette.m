@@ -3,6 +3,7 @@ function [sel pos] = roulette(fitness)
     r = random('unif', 0, 1);
     val = fitness(1);
     pos = 1;
+    sel = 0;
     for i = 2:length(fitness)
         if r < val
             sel = fitness(i-1);
