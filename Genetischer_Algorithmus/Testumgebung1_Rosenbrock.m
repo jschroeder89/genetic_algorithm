@@ -112,8 +112,8 @@ for s=1:1:numfun_s
                 acc_storage(idx,1) = {Methodenstring};
                 it_storage(idx,1) = {Methodenstring};
 
-                acc_sum = zeros(1,Spalten_acc-1);
-                it_sum = zeros(1,Spalten_it-1);
+                acc_sum = 0;
+                it_sum = 0;
 
 
                  %Schleife f�r mehrere Testreihen mit gleicher
@@ -129,18 +129,22 @@ for s=1:1:numfun_s
 
                     [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, @fRosenbrock, xmin, xmax, ymin, ymax, popsize, fun_sel(s), fun_cro(c), fun_mut(m), fun_rek(r), cro_w, mut_w, opt, dopt);
 
-                    %acc_sum(1) = acc_sum(1) + accuracy;
-                    %it_sum(1) = it_sum(1) + Best_Counter;
-
-                    %fprintf('\n1. Rosenbrock done mit L�sung - Optimal:\n');
-                    %disp(horzcat(loesung,opt'));
-                    %fprintf('It: %d \t acc: %f\n',Best_Counter,accuracy);
+                    %acc_sum = acc_sum + accuracy;
+                    %it_sum = it_sum + Best_Counter;
+                    acc_vek(i) = accuracy;
+                    it_vek(i) = Best_Counter;
+                    disp(i);
+                    fprintf('\n1. Rosenbrock done mit L�sung - Optimal:\n');
+                    disp(horzcat(loesung,opt'));
+                    fprintf('It: %d \t acc: %f\n',Best_Counter,accuracy);
 
                  end
 
              %Werte mitteln
-             acc_sum = acc_sum(:)*(1/Max_It);
-             it_sum = it_sum(:)*(1/Max_It);
+             %acc_sum = acc_sum(:)*(1/Max_It);
+             %it_sum = it_sum(:)*(1/Max_It);
+             acc_sum = sum(acc_vek(:))*(1/Max_It);
+             it_sum = sum(it_sum(:))*(1/Max_It);
 
              %Ergebnisse in Speicher schreiben
              acc_storage(idx,2:Spalten_acc) = num2cell(acc_sum);
