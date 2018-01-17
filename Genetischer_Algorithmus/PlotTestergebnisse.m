@@ -5,13 +5,13 @@ clc
 %% Einstellungen
 
 %Ordner für Testergebnisse erstellen
-DirName = ['Test03'];
-mkdir(DirName);
-copyfile action2.m Test03;
+DirName = ['TestFinal'];
+%mkdir(DirName);
+copyfile action2.m TestFinal;
 
 
 %Testergebnisse aus mat-datei laden
-load('Testergebnisse8_Treppe.mat');
+load('Testergebnisse5_BaecksTreppe.mat');
 
 %Anzahl an Fitnessfunktionen und Kombinationen der Methoden
 [KombiNum,FitnessNum] = size(acc_storage);
