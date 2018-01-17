@@ -134,6 +134,7 @@ for s=1:1:numfun_s
                     acc_vek(i) = accuracy;
                     it_vek(i) = Best_Counter;
                     disp(i);
+                    
                     fprintf('\n1. Rosenbrock done mit L�sung - Optimal:\n');
                     disp(horzcat(loesung,opt'));
                     fprintf('It: %d \t acc: %f\n',Best_Counter,accuracy);
