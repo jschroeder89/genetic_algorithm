@@ -145,7 +145,7 @@ for s=1:1:numfun_s
              %acc_sum = acc_sum(:)*(1/Max_It);
              %it_sum = it_sum(:)*(1/Max_It);
              acc_sum = sum(acc_vek(:))*(1/Max_It);
-             it_sum = sum(it_sum(:))*(1/Max_It);
+             it_sum = sum(it_vek(:))*(1/Max_It);
 
              %Ergebnisse in Speicher schreiben
              acc_storage(idx,2:Spalten_acc) = num2cell(acc_sum);
