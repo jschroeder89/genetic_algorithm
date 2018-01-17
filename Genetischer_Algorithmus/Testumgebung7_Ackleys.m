@@ -112,13 +112,13 @@ for s=1:1:numfun_s
                 acc_storage(idx,1) = {Methodenstring};
                 it_storage(idx,1) = {Methodenstring};
 
-                acc_sum = zeros(1,Spalten_acc-1);
-                it_sum = zeros(1,Spalten_it-1);
+                acc_sum = 0;
+                it_sum = 0;
 
 
                  %Schleife für mehrere Testreihen mit gleicher
                  %Funktionsmethoden
-                 for i=1:1:Max_It
+                 parfor i=1:1:Max_It
 
 
                     %-------------------
@@ -129,8 +129,11 @@ for s=1:1:numfun_s
 
                     [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, @fAckleysFunktion, xmin, xmax, ymin, ymax, popsize, fun_sel(s), fun_cro(c), fun_mut(m), fun_rek(r), cro_w, mut_w, opt, dopt);
 
-                    acc_sum(1) = acc_sum(1) + accuracy;
-                    it_sum(1) = it_sum(1) + Best_Counter;
+                    %acc_sum = acc_sum + accuracy;
+                    %it_sum = it_sum + Best_Counter;
+                    acc_vek(i) = accuracy;
+                    it_vek(i) = Best_Counter;
+                    disp(i);
 
                     fprintf('\n7. Ackleys Funktion done mit Lösung - Optimal:\n');
                     disp(horzcat(loesung,opt'));
@@ -139,8 +142,10 @@ for s=1:1:numfun_s
                  end
 
              %Werte mitteln
-             acc_sum = acc_sum(:)*(1/Max_It);
-             it_sum = it_sum(:)*(1/Max_It);
+             %acc_sum = acc_sum(:)*(1/Max_It);
+             %it_sum = it_sum(:)*(1/Max_It);
+             acc_sum = sum(acc_vek(:))*(1/Max_It);
+             it_sum = sum(it_vek(:))*(1/Max_It);
 
              %Ergebnisse in Speicher schreiben
              acc_storage(idx,2:Spalten_acc) = num2cell(acc_sum);
