@@ -11,7 +11,7 @@ copyfile action2.m Test03;
 
 
 %Testergebnisse aus mat-datei laden
-load('Testergebnisse3.mat');
+load('Testergebnisse8_Treppe.mat');
 
 %Anzahl an Fitnessfunktionen und Kombinationen der Methoden
 [KombiNum,FitnessNum] = size(acc_storage);
