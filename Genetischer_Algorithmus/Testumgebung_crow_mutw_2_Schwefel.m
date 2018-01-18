@@ -9,7 +9,7 @@ clc;
 
 % Parallel Computing on
 delete(gcp('nocreate'));
-pool = parpool('local');
+%pool = parpool('local');
 
 tic;
 %----Parameter für genetischen Algorithmus-------
@@ -61,7 +61,7 @@ s = 2;
 %Methoden-Strings für Cross_Over Funktion als cell array anlegen
 fun_cro = {'n_point_crossover','uniform_crossover','shuffle_crossover'};
 numfun_cr = length(fun_cro);
-c = 2;
+c = 1;
 
 %Methoden-Strings für Mutation Funktion als cell array anlegen
 fun_mut = {'one_wk','two_wk'};
@@ -119,7 +119,7 @@ for cw=1:1:num_crow
 
          %Schleife für mehrere Testreihen mit gleicher
          %Funktionsmethoden
-         parfor i=1:1:Max_It
+         for i=1:1:Max_It
 
 
             %-------------------
@@ -161,7 +161,7 @@ toc;
 save(filename_result,'acc_storage','it_storage','popsize', 'Methodenstring','fun_fit');
     
 %Threads schließen
-delete(gcp('nocreate'));
+%delete(gcp('nocreate'));
 
 
 

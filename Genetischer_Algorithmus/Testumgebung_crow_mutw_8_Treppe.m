@@ -136,7 +136,7 @@ for cw=1:1:num_crow
             it_vek(i) = Best_Counter;
             disp(i);
 
-            fprintf('\n2. Schwefel done mit Lösung - Optimal:\n');
+            fprintf('\n8. Treppenfunktion done mit Lösung - Optimal:\n');
             disp(horzcat(loesung,opt'));
             fprintf('It: %d \t acc: %f\n',Best_Counter,accuracy);
 

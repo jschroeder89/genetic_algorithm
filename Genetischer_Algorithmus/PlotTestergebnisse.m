@@ -11,7 +11,7 @@ copyfile action2.m TestFinal;
 
 
 %Testergebnisse aus mat-datei laden
-load('Testergebnisse7_Ackleys.mat');
+load('Testergebnisse6_Griewangks.mat');
 
 %Anzahl an Fitnessfunktionen und Kombinationen der Methoden
 [KombiNum,FitnessNum] = size(acc_storage);
