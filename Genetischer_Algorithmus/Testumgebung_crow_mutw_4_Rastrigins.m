@@ -32,10 +32,10 @@ num_wk = num_crow*num_mutw;
 
 %----Parameter für Testumgebung-------
 %Testdurchläufe pro Einstellparameter 
-Max_It = 1;
+Max_It = 10;
 
 %Mat-File Name, in welchem die Testergebnisse gespeichert werden
-filename_result = 'Testergebnisse2_Schwefel_cro_mut_wk.mat';
+filename_result = 'Testergebnisse4_Rastrigins_cro_mut_wk.mat';
 
 %%------------------------------------------------------------------------
 %% Funktionshandler und Methodenstrings anlegen
@@ -45,7 +45,7 @@ filename_result = 'Testergebnisse2_Schwefel_cro_mut_wk.mat';
 addpath('Fitnessfunktionen');
 
 %Fitnessfunktionen 
-fun_fit = {'fSchwefel'};
+fun_fit = {'fRastrigins'};
 
 %Funktions Handler für Codierungs Funktion anlegen
 fun_cod = 0;
@@ -123,12 +123,12 @@ for cw=1:1:num_crow
 
 
             %-------------------
-            % 1. Rosenbrock Sattel
+            % 4. Rastrigins Funktion
             %-------------------
-            xmin = -450; xmax = 450; ymin = -450; ymax = 450;
-            opt = [420.9687, 420.9687, -837.9658];
+            xmin = -5; xmax = 5; ymin = -5; ymax = 5;
+            opt = [0, 0, 0];
 
-            [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, @fSchwefel, xmin, xmax, ymin, ymax, popsize, fun_sel(s), fun_cro(c), fun_mut(m), fun_rek(r), cro_wk(cw), mut_wk(mw), opt, dopt);
+            [loesung,Best_Counter,accuracy] = GeneticAlgorithm(g_max, @fRastrigins, xmin, xmax, ymin, ymax, popsize, fun_sel(s), fun_cro(c), fun_mut(m), fun_rek(r), cro_wk(cw), mut_wk(mw), opt, dopt);
 
             %acc_sum = acc_sum + accuracy;
             %it_sum = it_sum + Best_Counter;
