@@ -8,7 +8,7 @@ yAchleys = linspace(-30,30,500);
 [XAckleys,YAckleys] = meshgrid(xAckleys,yAchleys);
 ZAckleys = fAckleysFunktion(XAckleys,YAckleys);
 
-subplot(3,3,1);
+subplot(2,4,1);
 mesh(XAckleys,YAckleys,ZAckleys);
 title('Ackleys Funktion');
 xlabel('x');
@@ -24,7 +24,7 @@ yShekels = linspace(-65,65,200);
 %ZShekels = fShekelsFuchsbauten(XShekels,YShekels);
 ZShekels = fShekelsFuchsbauten(XShekels,YShekels);
 
-subplot(3,3,2);
+subplot(2,4,2);
 mesh(XShekels,YShekels,ZShekels);
 title('Shekels Fuchsbauten');
 xlabel('x');
@@ -39,7 +39,7 @@ yRosenbrock = linspace(-2,2,200);
 [XRosenbrock,YRosenbrock] = meshgrid(xRosenbrock,yRosenbrock);
 ZRosenbrock = fRosenbrock(XRosenbrock,YRosenbrock);
 
-subplot(3,3,3);
+subplot(2,4,3);
 mesh(XRosenbrock,YRosenbrock,ZRosenbrock);
 title('Rosenbrocks Sattel');
 xlabel('x');
@@ -54,7 +54,7 @@ ySchwefel = linspace(-450,450,200);
 [XSchwefel,YSchwefel] = meshgrid(xSchwefel,ySchwefel);
 ZSchwefel = fSchwefel(XSchwefel,YSchwefel);
 
-subplot(3,3,4);
+subplot(2,4,4);
 mesh(XSchwefel,YSchwefel,ZSchwefel);
 title('Schwefels Funktion');
 xlabel('x');
@@ -64,19 +64,19 @@ grid minor;
 axis square;
 
 %% x^4 mit Rauschen
-x4 = linspace(-400,400,200);
-y4 = linspace(-400,400,200);
-[X4,Y4] = meshgrid(x4,y4);
-Z4 = fx4WithNoise(X4,Y4);
-
-subplot(3,3,5);
-mesh(X4,Y4,Z4);
-title('x^4 mit Rauschen');
-xlabel('x');
-ylabel('y');
-zlabel('z');
-grid minor;
-axis square;
+% x4 = linspace(-400,400,200);
+% y4 = linspace(-400,400,200);
+% [X4,Y4] = meshgrid(x4,y4);
+% Z4 = fx4WithNoise(X4,Y4);
+% 
+% subplot(3,3,5);
+% mesh(X4,Y4,Z4);
+% title('x^4 mit Rauschen');
+% xlabel('x');
+% ylabel('y');
+% zlabel('z');
+% grid minor;
+% axis square;
 
 %% Treppenfunktion
 xTreppe = linspace(-5,5,200);
@@ -84,7 +84,7 @@ yTreppe = linspace(-5,5,200);
 [XTreppe,YTreppe] = meshgrid(xTreppe,yTreppe);
 ZTreppe = fTreppenfunktion(XTreppe,YTreppe);
 
-subplot(3,3,6);
+subplot(2,4,5);
 mesh(XTreppe,YTreppe,ZTreppe);
 title('Treppenfunktion');
 xlabel('x');
@@ -99,7 +99,7 @@ yBTreppe = linspace(-5,5,200);
 [XBTreppe,YBTreppe] = meshgrid(xBTreppe,yBTreppe);
 ZBTreppe = fBaecksTreppenfunktion(XBTreppe,YBTreppe);
 
-subplot(3,3,7);
+subplot(2,4,6);
 mesh(XBTreppe,YBTreppe,ZBTreppe);
 title('Baecks Treppenfunktion');
 xlabel('x');
@@ -114,7 +114,7 @@ yRastrigins = linspace(-5,5,200);
 [XRastrigins,YRastrigins] = meshgrid(xRastrigins,yRastrigins);
 ZRastrigins = fRastrigins(XRastrigins,YRastrigins);
 
-subplot(3,3,8);
+subplot(2,4,7);
 mesh(XRastrigins,YRastrigins,ZRastrigins);
 title('Rastrigins Funktion');
 xlabel('x');
@@ -129,7 +129,7 @@ yGriewangk = linspace(-100,100,200);
 [XGriewangk,YGriewangk] = meshgrid(xGriewangk,yGriewangk);
 ZGriewangk = fGriewangks(XGriewangk,YGriewangk);
 
-subplot(3,3,9);
+subplot(2,4,8);
 mesh(XGriewangk,YGriewangk,ZGriewangk);
 title('Griewangks Funktion');
 xlabel('x');
