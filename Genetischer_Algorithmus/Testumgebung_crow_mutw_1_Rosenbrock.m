@@ -8,8 +8,8 @@ clc;
 %%------------------------------------------------------------------------
 
 % Parallel Computing on
-%delete(gcp('nocreate'));
-%pool = parpool('local');
+delete(gcp('nocreate'));
+pool = parpool('local');
 
 tic;
 %----Parameter für genetischen Algorithmus-------
@@ -119,7 +119,7 @@ for cw=1:1:num_crow
 
          %Schleife für mehrere Testreihen mit gleicher
          %Funktionsmethoden
-         for i=1:1:Max_It
+         parfor i=1:1:Max_It
 
 
             %-------------------
@@ -161,7 +161,7 @@ toc;
 save(filename_result,'acc_storage','it_storage','popsize', 'Methodenstring','fun_fit');
     
 %Threads schließen
-%delete(gcp('nocreate'));
+delete(gcp('nocreate'));
 
 
 
