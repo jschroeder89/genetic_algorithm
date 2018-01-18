@@ -11,7 +11,7 @@ copyfile action2.m TestFinal;
 
 
 %Testergebnisse aus mat-datei laden
-Teststring = 'Testergebnisse2_Schwefel_cro_mut_wk.mat';
+Teststring = 'Testergebnisse8_Treppe_cro_mut_wk.mat';
 load(Teststring);
 
 %Anzahl an Fitnessfunktionen und Kombinationen der Methoden
